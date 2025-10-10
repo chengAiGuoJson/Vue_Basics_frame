@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Text</title>
+</head>
+<script>
+    const dataSex = {
+        name: 'text',
+        age:18
+    }
+ // <!----------------------------- vue2基于Object.defineProperty实现----------------------------------------->
+    // 保存原始值
+    let _age = dataSexss.age;
+    
+    Object.defineProperty(dataSex,'age',{
+        get(){
+            console.log('属性被访问了', _age);
+            return _age
+        },
+        set(newValue){
+            console.log('属性被设置了', newValue);
+            _age = newValue
+        }
+    })
+    
+    // 测试代码
+    console.log('初始值:', dataSex.age); // 触发getter
+    dataSex.age = 25; // 触发setter
+    console.log('修改后:', dataSex.age); // 再次触发getter
+// <!--------------------- vue3响应式基于es6的Proxy实现 ------------------------->
+function reactive(target) {
+  if (typeof target !== 'object' || target === null) {
+    return target;
+  }
+  
+  return new Proxy(target, {
+    get(target, key, receiver) {
+        console.log(`getting ${key}!`);
+      const result = Reflect.get(target, key, receiver);
+      
+      // 依赖收集
+    //   track(target, key);
+      
+      // 如果访问的值是对象，递归创建响应式
+      if (typeof result === 'object' && result !== null) {
+        return reactive(result);
+      }
+      
+      return result;
+    },
+    
+    set(target, key, value, receiver) {
+        console.log('setter:', key, value)
+      const oldValue = target[key];
+      const result = Reflect.set(target, key, value, receiver);
+      
+    //   // 只有值真正改变时才触发更新
+    //   if (oldValue !== value) {
+    //     trigger(target, key);
+    //   }
+      
+      return result;
+    },
+    
+    has(target, key) {
+      track(target, key);
+      return Reflect.has(target, key);
+    },
+    
+    deleteProperty(target, key) {
+      const hadKey = Object.prototype.hasOwnProperty.call(target, key);
+      const result = Reflect.deleteProperty(target, key);
+      
+    //   if (result && hadKey) {
+    //     trigger(target, key);
+    //   }
+      
+      return result;
+    }
+  });
+}
+const reactiveData = reactive(dataSex)
+// reactiveData.sex = '女'
+reactiveData.name = '小王'
+console.log(reactiveData.name)
+
+
+</script>
+<body>
+    <div id="app">
+        测试页面
+    </div>
+</body>
+</html>

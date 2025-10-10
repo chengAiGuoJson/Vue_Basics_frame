@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue3 Proxy响应式原理演示</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .demo-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .button-group {
+            margin: 10px 0;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .performance-result {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .comparison-table th,
+        .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .comparison-table th {
+            background-color: #3498db;
+            color: white;
+        }
+        .comparison-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .vue2-col {
+            background-color: #ffebee;
+        }
+        .vue3-col {
+            background-color: #e8f5e8;
+        }
+        .code-block {
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vue3 Proxy响应式原理演示</h1>
+        
+        <div class="demo-section">
+            <h2>1. 基础Proxy响应式实现</h2>
+            <div class="button-group">
+                <button onclick="basicProxyDemo()">运行基础Proxy演示</button>
+                <button onclick="clearOutput('basic-output')">清空输出</button>
+            </div>
+            <div id="basic-output" class="output"></div>
+        </div>
+
+        <div class="demo-section">
+            <h2>2. 完整响应式系统演示</h2>
+            <div class="button-group">
+                <button onclick="fullReactiveDemo()">运行完整响应式演示</button>
+                <button onclick="clearOutput('reactive-output')">清空输出</button>
+            </div>
+            <div id="reactive-output" class="output"></div>
+        </div>
+
+        <div class="demo-section">
+            <h2>3. 数组响应式演示</h2>
+            <div class="button-group">
+                <button onclick="arrayReactiveDemo()">运行数组响应式演示</button>
+                <button onclick="clearOutput('array-output')">清空输出</button>
+            </div>
+            <div id="array-output" class="output"></div>
+        </div>
+
+        <div class="demo-section">
+            <h2>4. 性能对比演示</h2>
+            <div class="button-group">
+                <button onclick="performanceComparison()">运行性能对比</button>
+                <button onclick="clearOutput('performance-output')">清空输出</button>
+            </div>
+            <div id="performance-output" class="output"></div>
+            <div id="performance-result" class="performance-result" style="display: none;"></div>
+        </div>
+
+        <div class="demo-section">
+            <h2>5. Vue2 vs Vue3 功能对比</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>功能特性</th>
+                        <th class="vue2-col">Vue2 (Object.defineProperty)</th>
+                        <th class="vue3-col">Vue3 (Proxy)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>属性添加检测</td>
+                        <td class="vue2-col">❌ 需要Vue.set</td>
+                        <td class="vue3-col">✅ 原生支持</td>
+                    </tr>
+                    <tr>
+                        <td>属性删除检测</td>
+                        <td class="vue2-col">❌ 需要Vue.delete</td>
+                        <td class="vue3-col">✅ 原生支持</td>
+                    </tr>
+                    <tr>
+                        <td>数组索引修改</td>
+                        <td class="vue2-col">❌ 无法检测</td>
+                        <td class="vue3-col">✅ 完全支持</td>
+                    </tr>
+                    <tr>
+                        <td>数组长度修改</td>
+                        <td class="vue2-col">❌ 无法检测</td>
+                        <td class="vue3-col">✅ 完全支持</td>
+                    </tr>
+                    <tr>
+                        <td>Map/Set支持</td>
+                        <td class="vue2-col">❌ 不支持</td>
+                        <td class="vue3-col">✅ 完全支持</td>
+                    </tr>
+                    <tr>
+                        <td>初始化性能</td>
+                        <td class="vue2-col">❌ 需要递归遍历</td>
+                        <td class="vue3-col">✅ 惰性处理</td>
+                    </tr>
+                    <tr>
+                        <td>内存占用</td>
+                        <td class="vue2-col">❌ 每个属性都有闭包</td>
+                        <td class="vue3-col">✅ 更少的内存占用</td>
+                    </tr>
+                    <tr>
+                        <td>浏览器兼容性</td>
+                        <td class="vue2-col">✅ IE9+</td>
+                        <td class="vue3-col">❌ IE不支持</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="demo-section">
+            <h2>6. 核心代码实现</h2>
+            <h3>Vue3 Proxy响应式核心代码：</h3>
+            <div class="code-block">
+// 全局依赖映射
+const targetMap = new WeakMap();
+let activeEffect = null;
+
+// 依赖收集
+function track(target, key) {
+  if (!activeEffect) return;
+  
+  let depsMap = targetMap.get(target);
+  if (!depsMap) {
+    targetMap.set(target, (depsMap = new Map()));
+  }
+  
+  let dep = depsMap.get(key);
+  if (!dep) {
+    depsMap.set(key, (dep = new Set()));
+  }
+  
+  dep.add(activeEffect);
+}
+
+// 触发更新
+function trigger(target, key) {
+  const depsMap = targetMap.get(target);
+  if (!depsMap) return;
+  
+  const dep = depsMap.get(key);
+  if (dep) {
+    dep.forEach(effect => {
+      if (effect !== activeEffect) {
+        effect();
+      }
+    });
+  }
+}
+
+// 创建响应式对象
+function reactive(target) {
+  return new Proxy(target, {
+    get(target, key, receiver) {
+      track(target, key);
+      const result = Reflect.get(target, key, receiver);
+      return typeof result === 'object' && result !== null 
+        ? reactive(result) 
+        : result;
+    },
+    set(target, key, value, receiver) {
+      const result = Reflect.set(target, key, value, receiver);
+      trigger(target, key);
+      return result;
+    }
+  });
+}
+
+// 副作用函数
+function effect(fn) {
+  const effectFn = () => {
+    try {
+      activeEffect = effectFn;
+      return fn();
+    } finally {
+      activeEffect = null;
+    }
+  };
+  effectFn();
+  return effectFn;
+}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局依赖映射
+        const targetMap = new WeakMap();
+        let activeEffect = null;
+
+        // 依赖收集
+        function track(target, key) {
+            if (!activeEffect) return;
+            
+            let depsMap = targetMap.get(target);
+            if (!depsMap) {
+                targetMap.set(target, (depsMap = new Map()));
+            }
+            
+            let dep = depsMap.get(key);
+            if (!dep) {
+                depsMap.set(key, (dep = new Set()));
+            }
+            
+            dep.add(activeEffect);
+            log(`📦 收集依赖: ${key}`);
+        }
+
+        // 触发更新
+        function trigger(target, key) {
+            const depsMap = targetMap.get(target);
+            if (!depsMap) return;
+            
+            const dep = depsMap.get(key);
+            if (dep) {
+                log(`🚀 触发更新: ${key}`);
+                dep.forEach(effect => {
+                    if (effect !== activeEffect) {
+                        effect();
+                    }
+                });
+            }
+        }
+
+        // 创建响应式对象
+        function reactive(target) {
+            if (typeof target !== 'object' || target === null) {
+                return target;
+            }
+            
+            return new Proxy(target, {
+                get(target, key, receiver) {
+                    log(`🔍 访问属性: ${key}`);
+                    track(target, key);
+                    const result = Reflect.get(target, key, receiver);
+                    
+                    // 深层响应式
+                    if (typeof result === 'object' && result !== null) {
+                        return reactive(result);
+                    }
+                    
+                    return result;
+                },
+                
+                set(target, key, value, receiver) {
+                    const oldValue = target[key];
+                    log(`✏️ 设置属性: ${key} = ${JSON.stringify(value)}`);
+                    const result = Reflect.set(target, key, value, receiver);
+                    
+                    if (oldValue !== value) {
+                        trigger(target, key);
+                    }
+                    
+                    return result;
+                },
+                
+                has(target, key) {
+                    log(`❓ 检查属性: ${key}`);
+                    track(target, key);
+                    return Reflect.has(target, key);
+                },
+                
+                deleteProperty(target, key) {
+                    log(`🗑️ 删除属性: ${key}`);
+                    const hadKey = Object.prototype.hasOwnProperty.call(target, key);
+                    const result = Reflect.deleteProperty(target, key);
+                    
+                    if (result && hadKey) {
+                        trigger(target, key);
+                    }
+                    
+                    return result;
+                }
+            });
+        }
+
+        // 副作用函数
+        function effect(fn, name = 'effect') {
+            const effectFn = () => {
+                try {
+                    activeEffect = effectFn;
+                    log(`🎯 执行副作用: ${name}`);
+                    return fn();
+                } finally {
+                    activeEffect = null;
+                }
+            };
+            
+            effectFn.effectName = name;
+            effectFn();
+            return effectFn;
+        }
+
+        // 日志输出函数
+        let currentOutputId = '';
+        function log(message) {
+            if (currentOutputId) {
+                const output = document.getElementById(currentOutputId);
+                if (output) {
+                    output.innerHTML += message + '\n';
+                    output.scrollTop = output.scrollHeight;
+                }
+            }
+        }
+
+        function clearOutput(outputId) {
+            document.getElementById(outputId).innerHTML = '';
+        }
+
+        // 演示函数
+        function basicProxyDemo() {
+            currentOutputId = 'basic-output';
+            clearOutput(currentOutputId);
+            
+            log('=== 基础Proxy响应式演示 ===\n');
+            
+            // 创建响应式对象
+            const state = reactive({
+                message: 'Hello Vue3!',
+                count: 0
+            });
+            
+            // 创建副作用函数
+            effect(() => {
+                log(`📺 渲染: ${state.message}, 计数: ${state.count}`);
+            }, '渲染函数');
+            
+            log('\n--- 开始修改数据 ---');
+            
+            // 修改数据
+            setTimeout(() => {
+                state.message = 'Hello Proxy!';
+            }, 1000);
+            
+            setTimeout(() => {
+                state.count = 1;
+            }, 2000);
+            
+            setTimeout(() => {
+                state.newProp = '新属性';
+            }, 3000);
+        }
+
+        function fullReactiveDemo() {
+            currentOutputId = 'reactive-output';
+            clearOutput(currentOutputId);
+            
+            log('=== 完整响应式系统演示 ===\n');
+            
+            const state = reactive({
+                user: {
+                    name: 'John',
+                    age: 25,
+                    profile: {
+                        email: 'john@example.com'
+                    }
+                },
+                settings: {
+                    theme: 'light'
+                }
+            });
+            
+            // 多个副作用函数
+            effect(() => {
+                log(`👤 用户信息: ${state.user.name} (${state.user.age}岁)`);
+            }, '用户信息渲染');
+            
+            effect(() => {
+                log(`⚙️ 设置: 主题=${state.settings.theme}`);
+            }, '设置渲染');
+            
+            effect(() => {
+                if (state.user.profile) {
+                    log(`📧 邮箱: ${state.user.profile.email}`);
+                }
+            }, '邮箱渲染');
+            
+            log('\n--- 开始修改深层数据 ---');
+            
+            setTimeout(() => {
+                state.user.name = 'Jane';
+            }, 1000);
+            
+            setTimeout(() => {
+                state.user.profile.email = 'jane@example.com';
+            }, 2000);
+            
+            setTimeout(() => {
+                state.settings.theme = 'dark';
+            }, 3000);
+            
+            setTimeout(() => {
+                delete state.user.age;
+            }, 4000);
+        }
+
+        function arrayReactiveDemo() {
+            currentOutputId = 'array-output';
+            clearOutput(currentOutputId);
+            
+            log('=== 数组响应式演示 ===\n');
+            
+            const state = reactive({
+                items: [1, 2, 3],
+                users: [
+                    { name: 'Alice', age: 20 },
+                    { name: 'Bob', age: 25 }
+                ]
+            });
+            
+            effect(() => {
+                log(`📋 数组项: [${state.items.join(', ')}] (长度: ${state.items.length})`);
+            }, '数组渲染');
+            
+            effect(() => {
+                log(`👥 用户列表: ${state.users.map(u => u.name).join(', ')}`);
+            }, '用户列表渲染');
+            
+            log('\n--- 开始数组操作 ---');
+            
+            setTimeout(() => {
+                log('\n🔧 执行 push(4)');
+                state.items.push(4);
+            }, 1000);
+            
+            setTimeout(() => {
+                log('\n🔧 执行 items[0] = 10');
+                state.items[0] = 10;
+            }, 2000);
+            
+            setTimeout(() => {
+                log('\n🔧 执行 length = 2');
+                state.items.length = 2;
+            }, 3000);
+            
+            setTimeout(() => {
+                log('\n🔧 添加新用户');
+                state.users.push({ name: 'Charlie', age: 30 });
+            }, 4000);
+            
+            setTimeout(() => {
+                log('\n🔧 修改用户名');
+                state.users[0].name = 'Alice Smith';
+            }, 5000);
+        }
+
+        function performanceComparison() {
+            currentOutputId = 'performance-output';
+            clearOutput(currentOutputId);
+            
+            log('=== 性能对比演示 ===\n');
+            
+            // 创建大对象进行测试
+            const createLargeObject = (size) => {
+                const obj = {};
+                for (let i = 0; i < size; i++) {
+                    obj[`prop${i}`] = {
+                        value: i,
+                        nested: {
+                            deep: `value${i}`
+                        }
+                    };
+                }
+                return obj;
+            };
+            
+            const sizes = [100, 500, 1000];
+            const results = [];
+            
+            sizes.forEach(size => {
+                log(`\n📊 测试对象大小: ${size} 个属性`);
+                
+                // 模拟Vue2的初始化（递归遍历所有属性）
+                const vue2Start = performance.now();
+                const vue2Obj = createLargeObject(size);
+                // 模拟Object.defineProperty的递归处理
+                function mockVue2Reactive(obj) {
+                    Object.keys(obj).forEach(key => {
+                        if (typeof obj[key] === 'object' && obj[key] !== null) {
+                            mockVue2Reactive(obj[key]);
+                        }
+                    });
+                }
+                mockVue2Reactive(vue2Obj);
+                const vue2Time = performance.now() - vue2Start;
+                
+                // Vue3的初始化（只创建Proxy）
+                const vue3Start = performance.now();
+                const vue3Obj = reactive(createLargeObject(size));
+                const vue3Time = performance.now() - vue3Start;
+                
+                log(`Vue2模拟初始化时间: ${vue2Time.toFixed(2)}ms`);
+                log(`Vue3 Proxy初始化时间: ${vue3Time.toFixed(2)}ms`);
+                log(`性能提升: ${((vue2Time - vue3Time) / vue2Time * 100).toFixed(1)}%`);
+                
+                results.push({
+                    size,
+                    vue2Time: vue2Time.toFixed(2),
+                    vue3Time: vue3Time.toFixed(2),
+                    improvement: ((vue2Time - vue3Time) / vue2Time * 100).toFixed(1)
+                });
+            });
+            
+            // 显示结果表格
+            const resultDiv = document.getElementById('performance-result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <h3>性能测试结果</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr style="background: #f0f0f0;">
+                        <th style="border: 1px solid #ddd; padding: 8px;">对象大小</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">Vue2模拟时间</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">Vue3时间</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">性能提升</th>
+                    </tr>
+                    ${results.map(r => `
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;">${r.size} 个属性</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">${r.vue2Time}ms</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">${r.vue3Time}ms</td>
+                            <td style="border: 1px solid #ddd; padding: 8px; color: green;">${r.improvement}%</td>
+                        </tr>
+                    `).join('')}
+                </table>
+                <p><strong>结论：</strong>Vue3的Proxy在初始化阶段有显著的性能优势，特别是对于大型对象。</p>
+            `;
+        }
+    </script>
+</body>
+</html>

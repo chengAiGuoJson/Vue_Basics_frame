@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue2 Object.defineProperty 响应式原理Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #42b883;
+            text-align: center;
+        }
+        .demo-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+        .demo-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        button {
+            background: #42b883;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #369870;
+        }
+        .output {
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+        .reactive-data {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vue2 Object.defineProperty 响应式原理Demo</h1>
+        
+        <!-- 基础响应式演示 -->
+        <div class="demo-section">
+            <div class="demo-title">1. 基础响应式原理</div>
+            <div class="reactive-data">
+                <div>当前数据: <span id="basic-display">初始值</span></div>
+            </div>
+            <button onclick="updateBasicData()">修改数据</button>
+            <div class="output" id="basic-log"></div>
+        </div>
+
+        <!-- 依赖收集演示 -->
+        <div class="demo-section">
+            <div class="demo-title">2. 依赖收集与派发更新</div>
+            <div class="reactive-data">
+                <div>姓名: <span id="name-display">张三</span></div>
+                <div>年龄: <span id="age-display">25</span></div>
+                <div>计算属性(姓名+年龄): <span id="computed-display">张三-25岁</span></div>
+            </div>
+            <button onclick="updateName()">修改姓名</button>
+            <button onclick="updateAge()">修改年龄</button>
+            <div class="output" id="dependency-log"></div>
+        </div>
+
+        <!-- 数组响应式演示 -->
+        <div class="demo-section">
+            <div class="demo-title">3. 数组响应式处理</div>
+            <div class="reactive-data">
+                <div>数组内容: <span id="array-display">[1, 2, 3]</span></div>
+            </div>
+            <button onclick="pushArray()">push元素</button>
+            <button onclick="popArray()">pop元素</button>
+            <button onclick="modifyArrayIndex()">修改索引</button>
+            <div class="output" id="array-log"></div>
+        </div>
+    </div>
+
+    <script>
+        // 全局依赖收集器
+        let currentWatcher = null;
+        const watchers = [];
+
+        // 依赖收集类
+        class Dep {
+            constructor() {
+                this.subs = []; // 存储依赖的观察者
+            }
+
+            // 添加依赖
+            depend() {
+                if (currentWatcher) {
+                    this.subs.push(currentWatcher);
+                }
+            }
+
+            // 通知所有依赖更新
+            notify() {
+                this.subs.forEach(watcher => watcher.update());
+            }
+        }
+
+        // 观察者类
+        class Watcher {
+            constructor(fn, name = '') {
+                this.fn = fn;
+                this.name = name;
+                this.get();
+            }
+
+            get() {
+                currentWatcher = this;
+                this.fn(); // 执行函数，触发依赖收集
+                currentWatcher = null;
+            }
+
+            update() {
+                console.log(`${this.name} 观察者被通知更新`);
+                this.fn();
+            }
+        }
+
+        // 响应式处理函数
+        function defineReactive(obj, key, val) {
+            const dep = new Dep();
+            
+            Object.defineProperty(obj, key, {
+                enumerable: true,
+                configurable: true,
+                get() {
+                    console.log(`获取属性 ${key}: ${val}`);
+                    dep.depend(); // 收集依赖
+                    return val;
+                },
+                set(newVal) {
+                    if (newVal === val) return;
+                    console.log(`设置属性 ${key}: ${val} -> ${newVal}`);
+                    val = newVal;
+                    dep.notify(); // 派发更新
+                }
+            });
+        }
+
+        const testData = {
+            name: 'Vue3',
+            age: 3
+        };
+        defineReactive(testData, 'name','vue4')
+
+        // 1. 基础响应式演示
+        const basicData = {};
+        defineReactive(basicData, 'message', '初始值');
+
+        // 创建观察者
+        new Watcher(() => {
+            document.getElementById('basic-display').textContent = basicData.message;
+        }, '基础数据观察者');
+
+        function updateBasicData() {
+            const newValue = '更新时间: ' + new Date().toLocaleTimeString();
+            basicData.message = newValue;
+            
+            const log = document.getElementById('basic-log');
+            log.innerHTML += `<div>数据已更新: ${newValue}</div>`;
+        }
+
+        // 2. 依赖收集演示
+        const userData = {};
+        defineReactive(userData, 'name', '张三');
+        defineReactive(userData, 'age', 25);
+
+        // 创建多个观察者
+        new Watcher(() => {
+            document.getElementById('name-display').textContent = userData.name;
+        }, '姓名观察者');
+
+        new Watcher(() => {
+            document.getElementById('age-display').textContent = userData.age;
+        }, '年龄观察者');
+
+        new Watcher(() => {
+            const computed = `${userData.name}-${userData.age}岁`;
+            document.getElementById('computed-display').textContent = computed;
+        }, '计算属性观察者');
+
+        function updateName() {
+            const names = ['李四', '王五', '赵六', '钱七'];
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            userData.name = randomName;
+            
+            const log = document.getElementById('dependency-log');
+            log.innerHTML += `<div>姓名更新为: ${randomName}</div>`;
+        }
+
+        function updateAge() {
+            const newAge = Math.floor(Math.random() * 50) + 20;
+            userData.age = newAge;
+            
+            const log = document.getElementById('dependency-log');
+            log.innerHTML += `<div>年龄更新为: ${newAge}</div>`;
+        }
+
+        // 3. 数组响应式处理
+        const arrayMethods = Object.create(Array.prototype);
+        const methodsToIntercept = ['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'];
+
+        methodsToIntercept.forEach(method => {
+            const original = Array.prototype[method];
+            Object.defineProperty(arrayMethods, method, {
+                value: function(...args) {
+                    console.log(`数组方法 ${method} 被调用`);
+                    const result = original.apply(this, args);
+                    // 触发更新
+                    if (this.__dep__) {
+                        this.__dep__.notify();
+                    }
+                    return result;
+                },
+                enumerable: false,
+                writable: true,
+                configurable: true
+            });
+        });
+
+        function observeArray(arr) {
+            arr.__proto__ = arrayMethods;
+            arr.__dep__ = new Dep();
+            
+            // 为数组索引添加响应式
+            arr.forEach((item, index) => {
+                defineReactive(arr, index, item);
+            });
+        }
+
+        const reactiveArray = [1, 2, 3];
+        observeArray(reactiveArray);
+
+        // 数组观察者
+        new Watcher(() => {
+            document.getElementById('array-display').textContent = JSON.stringify(reactiveArray);
+        }, '数组观察者');
+
+        function pushArray() {
+            const newValue = Math.floor(Math.random() * 100);
+            reactiveArray.push(newValue);
+            
+            const log = document.getElementById('array-log');
+            log.innerHTML += `<div>push了元素: ${newValue}</div>`;
+        }
+
+        function popArray() {
+            if (reactiveArray.length > 0) {
+                const poppedValue = reactiveArray.pop();
+                const log = document.getElementById('array-log');
+                log.innerHTML += `<div>pop了元素: ${poppedValue}</div>`;
+            }
+        }
+
+        function modifyArrayIndex() {
+            if (reactiveArray.length > 0) {
+                const index = Math.floor(Math.random() * reactiveArray.length);
+                const newValue = Math.floor(Math.random() * 100);
+                const oldValue = reactiveArray[index];
+                reactiveArray[index] = newValue;
+                
+                const log = document.getElementById('array-log');
+                log.innerHTML += `<div>修改索引${index}: ${oldValue} -> ${newValue}</div>`;
+            }
+        }
+
+        // 页面加载完成后的说明
+        window.onload = function() {
+            console.log('Vue2响应式原理Demo已加载');
+            console.log('打开控制台可以看到详细的响应式过程日志');
+        };
+
+
+     
+        const textDataTow = {
+            name:'张三',
+            age:18
+        }
+        Object.defineProperty(textDataTow,'name',{
+            get(){
+                console.log('属性被访问了');
+                return textDataTow.name
+            },
+            set(newValue){
+                console.log('属性被设置了');
+                textDataTow.name = newValue
+            }
+        })
+        textDataTow.name = 'hello'
+
+    </script>
+</body>
+</html>
