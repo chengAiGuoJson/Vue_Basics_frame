@@ -6,7 +6,7 @@
       <header class="hero-section">
         <div class="hero-content">
           <h1 class="main-title">
-            <span class="title-line highlight">技术演示平台123</span>
+            <span class="title-line highlight">技术演示平台</span>
           </h1>
           <p class="subtitle">
             探索现代前端技术的无限可能，体验 <span class="highlight font-bold">前端</span> 生态系统的强大功能
