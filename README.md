@@ -167,10 +167,9 @@ vue-graphical-demo/
 **Happy Coding! 🎉**
 
 ## 部署到github pages
-
 1. **安装gh-pages**
 ```bash
-npm install gh-pages --save-dev
+pnpm install gh-pages --save-dev
 
 2. **修改package.json**
 ```json
@@ -183,7 +182,7 @@ npm install gh-pages --save-dev
 
 3. **部署到gh-pages分支**
 ```bash
-npm run deploy
+pnpm run deploy
 
 npx gh-pages -d dist
 ```
