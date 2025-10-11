@@ -23,23 +23,25 @@
       <!-- 功能模块展示 -->
       <section class="features-section">
         <h2 class="section-title">功能模块</h2>
-        <div class="features-grid">
-          <div 
-            v-for="(feature, index) in features" 
-            :key="feature.name"
-            class="feature-card"
-            :style="{ animationDelay: `${index * 0.1}s` }"
-            @click="navigateToFeature(feature.path)"
-          >
-            <div class="card-icon">
-               {{ feature.icon }}
-             </div>
-            <h3 class="card-title">{{ feature.name }}</h3>
-            <p class="card-description">{{ feature.description }}</p>
-            <div class="card-arrow">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+        <div class="h-930px overflow-hidden overflow-y-auto hidden-scrollbar scroll-container">
+          <div class="features-grid">
+            <div 
+              v-for="(feature, index) in features" 
+              :key="feature.name"
+              class="feature-card"
+              :style="{ animationDelay: `${index * 0.1}s` }"
+              @click="navigateToFeature(feature.path)"
+            >
+              <div class="card-icon">
+                {{ feature.icon }}
+              </div>
+              <h3 class="card-title">{{ feature.name }}</h3>
+              <p class="card-description">{{ feature.description }}</p>
+              <div class="card-arrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
@@ -118,6 +120,18 @@ const features = ref([
     description: '测试和演示 Element Plus 表单组件的使用',
     path: '/form-component-test',
     icon: '📝'
+  },
+  {
+    name: '性能测试',
+    description: '测试和演示 白屏时间、首屏时间、DOM解析、完全加载、FCP、LCP等 性能指标',
+    path: '/performance-test',
+    icon: '⚙️'
+  },
+  {
+    name: '滚动条样式',
+    description: '自定义滚动条样式，提升用户体验',
+    path: '/scrollbar-demo',
+    icon: '🔧'
   }
 ])
 
@@ -248,6 +262,25 @@ onMounted(() => {
   animation: fadeInUp 0.8s ease-out 0.8s forwards;
 }
 
+/* 滚动吸附容器 */
+.scroll-container {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  padding: 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.scroll-container:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
 .features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -268,6 +301,8 @@ onMounted(() => {
   opacity: 0;
   transform: translateY(30px);
   animation: slideInUp 0.6s ease-out forwards;
+  scroll-snap-align: start;
+  scroll-margin-top: 1rem;
 }
 
 .feature-card::before {

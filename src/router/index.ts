@@ -73,6 +73,22 @@ export const routerList: RouteRecordRaw[] = [
     },
     component: () => import('@/views/FormComponentTest/index.vue')
   },
+  {
+    path:'/performance-test',
+    name:'performance-test',
+    meta: {
+      name: '性能测试',
+    },
+    component: () => import('@/views/PerformanceTesting/index.vue')
+  },
+  {
+    path: '/scrollbar-demo',
+    name: 'scrollbar-demo',
+    meta: {
+      name: '滚动条样式演示',
+    },
+    component: () => import('@/views/ScrollbarDemo/index.vue')
+  },
 ]
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),

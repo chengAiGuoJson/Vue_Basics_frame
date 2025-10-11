@@ -341,17 +341,17 @@ const resetSvelte = () => {
         </div>
 
         <!-- 代码对比 -->
-        <div v-if="activeTab === 'code'" class="code-comparison">
+        <div v-if="activeTab === 'code'" class="h-1000px code-comparison overflow-hidden overflow-y-auto custom-scrollbar">
             <div class="code-section">
             <h3>📝 组件代码对比</h3>
             <div class="code-blocks">
                 <div class="code-block vue-code">
                 <h4>Vue 3 组件</h4>
-                <pre><code>{{ vueComponentCode }}</code></pre>
+                <pre class="thin-scrollbar"><code>{{ vueComponentCode }}</code></pre>
                 </div>
                 <div class="code-block svelte-code">
                 <h4>Svelte 组件</h4>
-                <pre><code>{{ svelteComponentCode }}</code></pre>
+                <pre class="thin-scrollbar"><code>{{ svelteComponentCode }}</code></pre>
                 </div>
             </div>
             </div>
@@ -361,11 +361,11 @@ const resetSvelte = () => {
             <div class="code-blocks">
                 <div class="code-block vue-code">
                 <h4>Pinia Store</h4>
-                <pre><code>{{ vueStoreCode }}</code></pre>
+                <pre class="thin-scrollbar"><code>{{ vueStoreCode }}</code></pre>
                 </div>
                 <div class="code-block svelte-code">
                 <h4>Svelte Store</h4>
-                <pre><code>{{ svelteStoreCode }}</code></pre>
+                <pre class="thin-scrollbar"><code>{{ svelteStoreCode }}</code></pre>
                 </div>
             </div>
             </div>
@@ -691,6 +691,26 @@ const resetSvelte = () => {
   overflow-x: auto;
   font-size: 0.9rem;
   line-height: 1.5;
+}
+
+/* 为代码块应用细滚动条样式 */
+.code-block pre.thin-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.code-block pre.thin-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+}
+
+.code-block pre.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+}
+
+.code-block pre.thin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
 
 /* 性能对比样式 */
