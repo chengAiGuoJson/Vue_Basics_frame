@@ -59,14 +59,49 @@ import { debounce } from 'lodash'
 // }
 // textFn({ userId: '张三', token: '123' })
 
-const handleClick = debounce(() => {
-    console.log('防抖测试')
-}, 1000)
+
+/**
+ * 事件循环机制
+ * 事件循环是一种机制，用于处理异步操作。它是浏览器或 Node.js 等环境中的一种机制，用于处理异步操作的回调函数。
+ * 事件循环的执行顺序如下：
+ * 1. 执行当前的宏任务(最初是整个脚本)
+ * 2. 执行过程中可能产生新的宏任务和微任务，分别加入相应队列
+ * 3. 当前宏任务执行完毕
+ * 4. 执行所有微任务队列中的任务(包括执行微任务过程中新产生的微任务)
+ * 5. 微任务队列清空后，进入下一轮事件循环，取出下一个宏任务执行
+ * 6. 重复以上步骤
+ */
+// async function async1() {
+//   console.log('async1 start'); // 2
+//   await new Promise(resolve => {
+//     console.log('promise1'); // 3
+//     resolve();
+//   }).then(() => {
+//     console.log('promise2'); // 6 微任务
+//   });
+//   console.log('async1 end'); // 7 微任务
+// }
+
+// console.log('script start'); // 1
+
+// setTimeout(() => {
+//   console.log('setTimeout'); // 9 宏任务
+// }, 0);
+
+// async1();
+
+// new Promise(resolve => {
+//   console.log('promise3'); // 4
+//   resolve();
+// }).then(() => {
+//   console.log('promise4'); // 8 微任务
+// });
+
+// console.log('script end'); // 5
 </script>
 <template>
     <div class="">
-        <h1>tsjsDEMO</h1>
-        <el-button type="primary" @click="handleClick">防抖测试</el-button>
+    
     </div>
 </template>
 <style scoped></style>
