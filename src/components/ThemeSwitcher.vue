@@ -1,29 +1,39 @@
 <template>
   <div class="theme-switcher" :class="[`size-${size}`, `position-${position}`]">
-    <!-- 主题切换按钮 -->
-    <div class="theme-switcher-trigger" @click="toggleDropdown" :class="{ 'active': isDropdownOpen }">
-      <div class="trigger-content">
-        <!-- 主题图标 -->
-        <div class="theme-icon">
-          <svg viewBox="0 0 24 24" class="icon">
-            <path d="M12 18.5C15.59 18.5 18.5 15.59 18.5 12C18.5 8.41 15.59 5.5 12 5.5C8.41 5.5 5.5 8.41 5.5 12C5.5 15.59 8.41 18.5 12 18.5ZM12 2L14.39 5.42C13.65 5.15 12.84 5 12 5C11.16 5 10.35 5.15 9.61 5.42L12 2ZM3.34 7L6.76 4.61C6.05 5.8 5.5 7.15 5.24 8.58L3.34 7ZM3.34 17L5.24 15.42C5.5 16.85 6.05 18.2 6.76 19.39L3.34 17ZM12 22L9.61 18.58C10.35 18.85 11.16 19 12 19C12.84 19 13.65 18.85 14.39 18.58L12 22ZM20.66 17L17.24 19.39C17.95 18.2 18.5 16.85 18.76 15.42L20.66 17ZM20.66 7L18.76 8.58C18.5 7.15 17.95 5.8 17.24 4.61L20.66 7Z"/>
+    <div class="theme-switcher-container">
+      <div class="back-button-container" v-if="!isHomePage">
+        <div class="back-button" @click="goBack">
+          返回
+          <!-- 装饰性光效 -->
+          <div class="glow-effect"></div>
+        </div>
+      </div>
+     
+      <!-- 主题切换按钮 -->
+      <div class="theme-switcher-trigger" @click="toggleDropdown" :class="{ 'active': isDropdownOpen }">
+        <div class="trigger-content">
+          <!-- 主题图标 -->
+          <div class="theme-icon">
+            <svg viewBox="0 0 24 24" class="icon">
+              <path d="M12 18.5C15.59 18.5 18.5 15.59 18.5 12C18.5 8.41 15.59 5.5 12 5.5C8.41 5.5 5.5 8.41 5.5 12C5.5 15.59 8.41 18.5 12 18.5ZM12 2L14.39 5.42C13.65 5.15 12.84 5 12 5C11.16 5 10.35 5.15 9.61 5.42L12 2ZM3.34 7L6.76 4.61C6.05 5.8 5.5 7.15 5.24 8.58L3.34 7ZM3.34 17L5.24 15.42C5.5 16.85 6.05 18.2 6.76 19.39L3.34 17ZM12 22L9.61 18.58C10.35 18.85 11.16 19 12 19C12.84 19 13.65 18.85 14.39 18.58L12 22ZM20.66 17L17.24 19.39C17.95 18.2 18.5 16.85 18.76 15.42L20.66 17ZM20.66 7L18.76 8.58C18.5 7.15 17.95 5.8 17.24 4.61L20.66 7Z"/>
+            </svg>
+          </div>
+          
+          <!-- 当前主题预览 -->
+          <div class="current-theme-preview" :style="getThemePreviewStyle(currentTheme)"></div>
+          
+          <!-- 主题名称 -->
+          <span v-if="showLabel" class="theme-label">{{ currentThemeConfig.displayName }}</span>
+          
+          <!-- 下拉箭头 -->
+          <svg class="dropdown-arrow" :class="{ 'rotated': isDropdownOpen }" viewBox="0 0 24 24">
+            <path d="M7 10l5 5 5-5z"/>
           </svg>
         </div>
-        
-        <!-- 当前主题预览 -->
-        <div class="current-theme-preview" :style="getThemePreviewStyle(currentTheme)"></div>
-        
-        <!-- 主题名称 -->
-        <span v-if="showLabel" class="theme-label">{{ currentThemeConfig.displayName }}</span>
-        
-        <!-- 下拉箭头 -->
-        <svg class="dropdown-arrow" :class="{ 'rotated': isDropdownOpen }" viewBox="0 0 24 24">
-          <path d="M7 10l5 5 5-5z"/>
-        </svg>
-      </div>
       
       <!-- 装饰性光效 -->
       <div class="glow-effect"></div>
+    </div>
     </div>
     
     <!-- 下拉菜单 -->
@@ -65,8 +75,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, computed,onUnmounted} from 'vue'
+import {  useRoute, useRouter  } from 'vue-router'
 import { useTheme, type ThemeType, type ThemeSwitcherProps } from '@/composables/useTheme'
+
+const route = useRoute();
+const router = useRouter();
+
+// 判断当前是否在首页
+const isHomePage = computed(() => {
+  return route.path === '/' || route.name === 'home';
+});
+
+// 返回上一页
+const goBack = () => {
+  router.back();
+};
 
 // Props
 const props = withDefaults(defineProps<ThemeSwitcherProps>(), {
@@ -158,6 +182,51 @@ onUnmounted(() => {
   position: fixed;
   bottom: 24px;
   left: 24px;
+}
+
+/* 主题切换容器 */
+.theme-switcher-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 返回按钮 */
+.back-button-container {
+  position: relative;
+}
+
+.back-button {
+  position: relative;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 14px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  user-select: none;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.16),
+    0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.back-button:hover .glow-effect {
+  left: 100%;
 }
 
 /* 主题切换按钮 */
@@ -538,4 +607,63 @@ onUnmounted(() => {
 .size-large .theme-label {
   font-size: 16px;
 }
+
+/* 返回按钮样式 */
+.back-button {
+  position: fixed;
+  width: 100px;
+  text-align: center;
+  top: 24px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 100;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.16),
+    0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* 添加光韵效果 */
+
+
+.back-button:hover::before {
+  opacity: 1;
+  animation: shine 1.5s infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
+.back-icon {
+  margin-right: 6px;
+  font-size: 18px;
+}
+
 </style>
