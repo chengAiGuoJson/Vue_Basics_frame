@@ -14,6 +14,8 @@ import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
           <div class="shape shape-2"></div>
           <div class="shape shape-3"></div>
           <div class="shape shape-4"></div>
+          <div class="shape shape-5"></div>
+          <div class="shape shape-6"></div>
         </div>
       </div>
        <ThemeSwitcher :show-label="true" size="medium" position="top-right" />
@@ -122,43 +124,82 @@ import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
 }
 
 @keyframes float {
-  0% { transform: translateY(0) translateX(0) scale(1); filter: brightness(1); }
-  50% { transform: translateY(-6px) translateX(3px) scale(1.01); filter: brightness(1.02); }
-  100% { transform: translateY(0) translateX(0) scale(1); filter: brightness(1); }
+  0% { transform: translateY(0) translateX(0) scale(1) rotate(0deg); filter: brightness(1); }
+  25% { transform: translateY(-15px) translateX(10px) scale(1.02) rotate(2deg); filter: brightness(1.03); }
+  50% { transform: translateY(-25px) translateX(5px) scale(1.01) rotate(5deg); filter: brightness(1.05); }
+  75% { transform: translateY(-15px) translateX(-8px) scale(1.03) rotate(3deg); filter: brightness(1.02); }
+  100% { transform: translateY(0) translateX(0) scale(1) rotate(0deg); filter: brightness(1); }
+}
+
+/* 泡泡上升动画 */
+@keyframes rise {
+  0% { transform: translateY(10px) translateX(0) scale(1); opacity: 0.4; }
+  50% { transform: translateY(-30vh) translateX(calc(var(--drift) * 30px)) scale(1.1); opacity: 0.7; }
+  100% { transform: translateY(-60vh) translateX(calc(var(--drift) * 50px)) scale(0.9); opacity: 0.3; }
 }
 
 /* 不同球体的尺寸、颜色与位置 */
 .shape-1 {
   --size: 120px;
-  top: 12%;
+  --drift: -1;
+  top: 70%;
   left: 10%;
   filter: hue-rotate(-10deg) saturate(1.05);
-  animation-delay: 0s;
+  animation: rise 15s ease-in-out infinite alternate, float 7s ease-in-out infinite;
+  animation-delay: 0s, 0.5s;
 }
 
 .shape-2 {
   --size: 170px;
-  top: 28%;
+  --drift: 1.2;
+  top: 60%;
   right: 12%;
   filter: hue-rotate(0deg) saturate(1.08);
-  animation-delay: 0.4s;
+  animation: rise 18s ease-in-out infinite alternate, float 8s ease-in-out infinite;
+  animation-delay: 2s, 0s;
 }
 
 .shape-3 {
   --size: 100px;
-  bottom: 18%;
+  --drift: 0.8;
+  bottom: 30%;
   left: 22%;
   filter: hue-rotate(15deg) saturate(1.07);
-  animation-delay: 0.8s;
+  animation: rise 12s ease-in-out infinite alternate, float 6s ease-in-out infinite;
+  animation-delay: 1s, 1.5s;
 }
 
 .shape-4 {
   --size: 150px;
-  bottom: 22%;
+  --drift: -0.5;
+  bottom: 40%;
   right: 18%;
   filter: hue-rotate(-20deg) saturate(1.06);
-  animation-delay: 1.1s;
+  animation: rise 20s ease-in-out infinite alternate, float 9s ease-in-out infinite;
+  animation-delay: 0.5s, 2s;
 }
+
+.shape-5 {
+  --size: 130px;
+  --drift: 1.5;
+  top: 10%;
+  left: 10%;
+  filter: hue-rotate(30deg) saturate(1.05);
+  animation: rise 16s ease-in-out infinite alternate, float 7s ease-in-out infinite;
+  animation-delay: 3s, 0.5s;
+}
+
+.shape-6 {
+  --size: 160px;
+  --drift: -1.2;
+  top: 20%;
+  left: 15%;
+  filter: hue-rotate(-30deg) saturate(1.08);
+  animation: rise 14s ease-in-out infinite alternate, float 8s ease-in-out infinite;
+  animation-delay: 4s, 1s;
+}
+
+
 
 /* 按主题微调球体配色以更融洽（使用全局选择器覆盖） */
 :global([data-theme="dark"] .shape) {
