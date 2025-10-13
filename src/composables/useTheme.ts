@@ -135,7 +135,7 @@ export function useTheme() {
   }
   
   return {
-    currentTheme: currentTheme.value,
+    currentTheme,
     currentThemeConfig,
     availableThemes,
     setTheme,
