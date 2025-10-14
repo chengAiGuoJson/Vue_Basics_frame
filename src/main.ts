@@ -10,6 +10,9 @@ import ja from 'element-plus/es/locale/lang/ja'
 // 引入全局主题样式
 import '@/assets/styles/theme.css'
 
+// 引入iconfont
+import '@/assets/iconfont/iconfont.css'
+
 // 引入highlight.js
 import hljs from 'highlight.js/lib/core'
 import xml from 'highlight.js/lib/languages/xml'

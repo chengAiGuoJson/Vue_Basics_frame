@@ -12,10 +12,7 @@
             探索现代前端技术的无限可能，体验 <span class="highlight font-bold">前端</span> 生态系统的强大功能
           </p>
           <div class="tech-badges">
-            <span class="badge">Vue 3</span>
-            <span class="badge">TypeScript</span>
-            <span class="badge">WindiCSS</span>
-            <span class="badge">Element Plus</span>
+            <span v-for="item in keywords" :key="item.name" class="badge cursor-pointer" @click="navigateToKeyword(item.link)"><span v-html="item.icon"></span> {{ item.name }}</span>
           </div>
         </div>
       </header>
@@ -70,6 +67,54 @@ import { useRouter } from 'vue-router'
 import { routerList } from '@/router'
 
 const router = useRouter()
+// 关键字
+const keywords = [
+  {
+    icon: '<i class="iconfont icon-vue text-[#42b983]"></i>',
+    name: 'Vue3',
+    link: 'https://cn.vuejs.org/',
+  },
+  {
+    icon: '<i class="iconfont icon-vite text-[#ffc51d] "></i>',
+    name: 'vite',
+    link: 'https://cn.vite.dev/',
+  },
+  {
+    icon: '<i class="iconfont icon-webpack text-[#84c7e8]"></i>',
+    name: 'webpack',
+    link: 'https://webpack.docschina.org/'
+  },
+  {
+    icon: '🔍',
+    name: 'TypeScript',
+    link: 'https://www.typescriptlang.org/zh/docs/',
+  },
+  {
+    icon: '🍃',
+    name: 'Windicss',
+    link: 'https://cn.windicss.org/',
+  },
+  {
+    icon: '🧩',
+    name: 'Element Plus',
+    link: 'https://element-plus.org/zh-CN/',
+  },
+  {
+    icon: '<i class="iconfont icon-echarts text-[#fb628b]"></i>',
+    name: 'ECHarts',
+    link: 'https://echarts.apache.org/zh/index.html',
+  },
+  {
+    icon: '🌐',
+    name: 'web.de',
+    link: 'https://web.dev/?hl=zh-cn',
+  },
+  {
+    icon: '<i class="iconfont icon-github"></i>',
+    name:'github',
+    link:'https://github.com/'
+  }
+]
 
 // 功能模块数据
 const features = ref([
@@ -154,6 +199,12 @@ const highlights = ref([
     description: '模块化组件设计，可复用性强，易于维护和扩展'
   }
 ])
+
+// 导航到关键字页面
+const navigateToKeyword = (link: string) => {
+  //新窗口打开网页
+  window.open(link, '_blank')
+}
 
 // 导航到功能页面
 const navigateToFeature = (path: string) => {

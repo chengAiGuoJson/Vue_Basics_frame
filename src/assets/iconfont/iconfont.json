@@ -1,0 +1,44 @@
+{
+  "id": "5039933",
+  "name": "自测DEMO项目",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "8760187",
+      "name": "github",
+      "font_class": "github",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "45698148",
+      "name": "echarts-copy",
+      "font_class": "echarts",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "6496025",
+      "name": "Webpack",
+      "font_class": "webpack",
+      "unicode": "e799",
+      "unicode_decimal": 59289
+    },
+    {
+      "icon_id": "13304145",
+      "name": "vue",
+      "font_class": "vue",
+      "unicode": "e6b9",
+      "unicode_decimal": 59065
+    },
+    {
+      "icon_id": "35563101",
+      "name": "vite",
+      "font_class": "vite",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    }
+  ]
+}
