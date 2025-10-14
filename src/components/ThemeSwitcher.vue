@@ -1,8 +1,8 @@
 <template>
   <div class="theme-switcher" :class="[`size-${size}`, `position-${position}`]">
     <div class="theme-switcher-container">
-      <div class="back-button-container" v-if="!isHomePage">
-        <div class="back-button" @click="goBack">
+      <div class="theme-switcher-trigger" v-if="!isHomePage">
+        <div class="trigger-content theme-label" @click="goBack">
           返回
           <!-- 装饰性光效 -->
           <div class="glow-effect"></div>
@@ -189,44 +189,6 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-/* 返回按钮 */
-.back-button-container {
-  position: relative;
-}
-
-.back-button {
-  position: relative;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 14px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  user-select: none;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.12),
-    0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.back-button:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-  box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.16),
-    0 4px 12px rgba(0, 0, 0, 0.12);
-}
-
-.back-button:hover .glow-effect {
-  left: 100%;
 }
 
 /* 主题切换按钮 */
@@ -608,49 +570,6 @@ onUnmounted(() => {
   font-size: 16px;
 }
 
-/* 返回按钮样式 */
-.back-button {
-  position: fixed;
-  width: 100px;
-  text-align: center;
-  top: 24px;
-  left: 24px;
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  z-index: 100;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.12),
-    0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-  position: relative;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-.back-button:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-  box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.16),
-    0 4px 12px rgba(0, 0, 0, 0.12);
-}
-
-/* 添加光韵效果 */
-
-
-.back-button:hover::before {
-  opacity: 1;
-  animation: shine 1.5s infinite;
-}
 
 @keyframes shine {
   0% {

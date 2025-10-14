@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 
 // 主题类型定义
-export type ThemeType = 'default' | 'dark' | 'light'
+export type ThemeType = 'colorful' | 'dark' | 'light'
 
 // 主题配置接口
 export interface ThemeConfig {
@@ -22,21 +22,6 @@ export interface ThemeConfig {
 
 // 预定义主题配置
 const themeConfigs: Record<ThemeType, ThemeConfig> = {
-  default: {
-    name: 'default',
-    displayName: '默认主题',
-    primaryGradientStart: '#667eea',
-    primaryGradientEnd: '#764ba2',
-    primaryGradientDirection: '135deg',
-    bgDecorationOpacity: 0.1,
-    cardBgOpacity: 0.1,
-    cardBorderOpacity: 0.2,
-    textPrimary: 'white',
-    textSecondary: 'rgba(255, 255, 255, 0.8)',
-    textTertiary: 'rgba(255, 255, 255, 0.6)',
-    highlightGradientStart: '#ff6b6b',
-    highlightGradientEnd: '#feca57'
-  },
   dark: {
     name: 'dark',
     displayName: '暗色主题',
@@ -52,6 +37,22 @@ const themeConfigs: Record<ThemeType, ThemeConfig> = {
     highlightGradientStart: '#e74c3c',
     highlightGradientEnd: '#f39c12'
   },
+  colorful: {
+    name: 'colorful',
+    displayName: '彩色主题',
+    primaryGradientStart: '#667eea',
+    primaryGradientEnd: '#764ba2',
+    primaryGradientDirection: '135deg',
+    bgDecorationOpacity: 0.1,
+    cardBgOpacity: 0.1,
+    cardBorderOpacity: 0.2,
+    textPrimary: 'white',
+    textSecondary: 'rgba(255, 255, 255, 0.8)',
+    textTertiary: 'rgba(255, 255, 255, 0.6)',
+    highlightGradientStart: '#ff6b6b',
+    highlightGradientEnd: '#feca57'
+  },
+  
   light: {
     name: 'light',
     displayName: '亮色主题',
@@ -70,7 +71,7 @@ const themeConfigs: Record<ThemeType, ThemeConfig> = {
 }
 
 // 当前主题状态
-const currentTheme = ref<ThemeType>('default')
+const currentTheme = ref<ThemeType>('dark')
 
 // 主题管理器 composable
 export function useTheme() {
@@ -116,7 +117,7 @@ export function useTheme() {
     if (savedTheme && themeConfigs[savedTheme]) {
       setTheme(savedTheme)
     } else {
-      setTheme('default')
+      setTheme('dark')
     }
   }
   
