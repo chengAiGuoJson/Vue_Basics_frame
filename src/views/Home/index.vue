@@ -75,6 +75,11 @@ const keywords = [
     link: 'https://cn.vuejs.org/',
   },
   {
+    icon: '<i class="iconfont icon-React text-[#61dafb]"></i>',
+    name:'React',
+    link:'https://zh-hans.react.dev/'
+  },
+  {
     icon: '<i class="iconfont icon-vite text-[#ffc51d] "></i>',
     name: 'vite',
     link: 'https://cn.vite.dev/',
@@ -98,6 +103,11 @@ const keywords = [
     icon: '🧩',
     name: 'Element Plus',
     link: 'https://element-plus.org/zh-CN/',
+  },
+  {
+    icon: '<i class="iconfont icon-antd-copy text-[#f74557]"></i>',
+    name:'Ant Design of React',
+    link: 'https://ant.design/docs/react/introduce-cn'
   },
   {
     icon: '<i class="iconfont icon-echarts text-[#fb628b]"></i>',

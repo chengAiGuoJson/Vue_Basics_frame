@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "6496027",
+      "name": "React",
+      "font_class": "React",
+      "unicode": "e79a",
+      "unicode_decimal": 59290
+    },
+    {
+      "icon_id": "18123977",
+      "name": "antd",
+      "font_class": "antd-copy",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
       "icon_id": "8760187",
       "name": "github",
       "font_class": "github",
