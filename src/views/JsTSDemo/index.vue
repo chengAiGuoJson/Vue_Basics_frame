@@ -98,10 +98,88 @@ import { debounce } from 'lodash'
 // });
 
 // console.log('script end'); // 5
+
+/**
+ * 动物类
+ * 动物类的实例属性有 name 和 age
+ * 如果定义了static 关键字，那么这个属性就属于类本身，而不是类的实例(species)，它在构造函数里面
+ * 动物类的实例方法有 eat 和 run
+ * 如果定义了static 关键字，那么这个方法就属于类本身，而不是类的实例，它在构造函数里面
+ * Animal.name 有值的原因
+    Animal.name 输出的是 "Animal" ，这是因为：
+    所有函数（包括类）都有一个内置的 name 属性
+    这个属性返回函数/类的名称
+    Animal.name 返回字符串 "Animal"
+ */
+// class Animal {
+//     name: string;
+//     age: number = 18;
+//     static species: string = '动物';
+//     static eat() {
+//         console.log(this.species + '正在吃饭');
+//     }
+//     constructor(name: string, age: number) {
+//         this.name = name;
+//         this.age = age;
+//     }
+//     eat() {
+//         console.log(this.name + '正在吃饭');
+//     }
+//     run() {
+//         console.log(this.name + '正在跑步');
+//     }
+// }
+// console.log(Animal.prototype,'动物类的原型对象')
+// const cat = new Animal('小白',2);
+// console.log(cat)
+// const dog = new Animal('旺财',3);
+// console.log(dog)
+
+// console.log(dog.__proto__ === Animal.prototype,'动物类的原型对象') // true
+// console.log(Animal.__proto__ === Function.prototype,'动物类的原型对象') // true
+
+// function Animal2() {
+//     this.name = '动物2';
+// }
+// console.log(Animal2.__proto__ === Function.prototype,'动物类的原型对象') // true
+// console.log(Animal2.prototype,'动物类的原型对象') // 类的原型就是它本身
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const cat = new Animal('小白');
+// const obj = {
+//     name: '张三',
+//     age: 18
+// }
+// console.log(Animal.eat.prototype === Function.prototype)
+// console.log(obj.prototype)
+// console.log(obj.__proto__ === Object.prototype,'对象的原型对象')
+// console.log(cat.__proto__ === Animal.prototype,'动物类的原型对象')
+// console.log(Animal.__proto__ === Function.prototype,'动物类的原型对象')
+// cat.eat();
+// const jantou = () =>{
+//     console.log('我是箭头函数');
+// }
+// console.log(jantou.__proto__,'箭头函数的原型对象')
+// console.log(jantou.prototype,'箭头函数的原型对象')
+// console.log(Animal.prototype,'动物类的原型对象')
+// console.log(Animal.__proto__,'动物类的原型对象')
+
+import TrafficLight from '@/components/TrafficLight/index.vue'
 </script>
 <template>
     <div class="">
-    
+        <TrafficLight></TrafficLight>
     </div>
 </template>
 <style scoped></style>
