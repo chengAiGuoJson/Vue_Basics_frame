@@ -123,7 +123,7 @@ const keywords = [
     icon: '<i class="iconfont icon-github"></i>',
     name:'github',
     link:'https://github.com/'
-  }
+  },
 ]
 
 // 功能模块数据
@@ -187,7 +187,13 @@ const features = ref([
     description: '自定义滚动条样式，提升用户体验',
     path: '/scrollbar-demo',
     icon: '🔧'
-  }
+  },
+  {
+    name: '购物车',
+    description: '面向对象开发实现购物车功能，包括添加、删除、数量调整和总价计算',
+    path: '/shopping-cart',
+    icon: '🛒'
+  },
 ])
 
 // 技术亮点数据

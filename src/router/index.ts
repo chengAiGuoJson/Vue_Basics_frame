@@ -89,6 +89,14 @@ export const routerList: RouteRecordRaw[] = [
     },
     component: () => import('@/views/ScrollbarDemo/index.vue')
   },
+  {
+    path: '/shopping-cart',
+    name: 'shopping-cart',
+    meta: {
+      name: '购物车',
+    },
+    component: () => import('@/views/ShoppingCart/index.vue')
+  },
 ]
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
