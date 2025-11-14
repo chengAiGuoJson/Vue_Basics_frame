@@ -43,6 +43,7 @@ const relayout = () => {
   const missing = calcFillCount();
   if (missing > 0) loadImages(missing);
 };
+//防抖处理，防止视口改变频率高不断执行方法，带来性能问题
 const debouncedRelayout = useDebounceFn(relayout, 200);
 
 onMounted(() => {
