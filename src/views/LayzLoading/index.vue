@@ -9,7 +9,10 @@ import {
 const images = ref<string[]>([]);
 const infiniteSentinel = ref<HTMLElement | null>(null);
 const loading = ref(false);
-const PICTURE = 400;
+const defaultSize = 400;
+const PICTURESIZE = 1000;
+const pictureWidth = ref<number>(defaultSize);
+const pictureHeight = ref<number>(defaultSize);
 
 const loadedMap = ref<Record<string, boolean>>({});
 const errorMap = ref<Record<string, boolean>>({});
@@ -22,10 +25,26 @@ const onImgError = (src: string) => {
   loadedMap.value[src] = false;
 };
 
+const previewSrc = ref<string | null>(null);
+const previewScale = ref<number>(1);
+const openPreview = (src: string) => {
+  previewSrc.value = src;
+  previewScale.value = 1;
+};
+const closePreview = () => {
+  previewSrc.value = null;
+};
+
+const onPreviewWheel = (e: WheelEvent) => {
+  const step = 0.1;
+  const next = previewScale.value + (e.deltaY > 0 ? -step : step);
+  previewScale.value = Math.min(5, Math.max(0.2, next));
+};
+
 const createHash = () =>
   Date.now().toString(36) + Math.random().toString(36).slice(2);
 const createImageUrl = () =>
-  `https://picsum.photos/400/400?hash=${createHash()}`;
+  `https://picsum.photos/${PICTURESIZE}/${PICTURESIZE}?hash=${createHash()}`;
 
 const loadImages = (count: number) => {
   if (loading.value) return;
@@ -37,8 +56,8 @@ const loadImages = (count: number) => {
 };
 
 const calcInitialCount = () => {
-  const col = Math.max(1, Math.floor(window.innerWidth / PICTURE));
-  const row = Math.max(1, Math.ceil(window.innerHeight / PICTURE));
+  const col = Math.max(1, Math.floor(window.innerWidth / pictureWidth.value));
+  const row = Math.max(1, Math.ceil(window.innerHeight / pictureHeight.value));
   return col * row;
 };
 
@@ -56,13 +75,15 @@ const relayout = () => {
 };
 //防抖处理，防止视口改变频率高不断执行方法，带来性能问题
 const debouncedRelayout = useDebounceFn(relayout, 200);
-
 onMounted(() => {
   loadImages(calcInitialCount());
   const { stop } = useIntersectionObserver(infiniteSentinel, ([entry]) => {
     console.log(entry);
     if (entry && entry.isIntersecting) {
-      const col = Math.max(1, Math.floor(window.innerWidth / PICTURE));
+      const col = Math.max(
+        1,
+        Math.floor(window.innerWidth / pictureWidth.value)
+      );
       loadImages(col);
     }
   });
@@ -79,20 +100,30 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <!-- 将容器栅格改为响应式自适应： grid-cols-[repeat(auto-fit,minmax(200px,1fr))] 。当视口变窄时，卡片自动换行并保持最小宽度。 -->
-  <div class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4">
+  <div
+    class="grid gap-4"
+    :style="{
+      gridTemplateColumns: `repeat(auto-fit, minmax(${pictureWidth}px, 1fr))`,
+    }"
+  >
     <div
       v-for="(item, index) in images"
       :key="index"
-      class="bg-[#f0f0f0] p-4 flex items-center justify-center min-w-400px min-h-400px"
+      class="bg-[#f0f0f0] p-4 flex items-center justify-center"
+      :style="{
+        minWidth: pictureWidth + 'px',
+        minHeight: pictureHeight + 'px',
+      }"
     >
       <div class="relative w-full h-full">
         <img
           :src="item"
           alt=""
-          class="w-full h-full object-cover transition-opacity duration-300"
+          class="w-full h-full cursor-pointer object-cover transition-opacity duration-300"
           :class="loadedMap[item] ? 'opacity-100' : 'opacity-0'"
           @load="onImgLoad(item)"
           @error="onImgError(item)"
+          @click="openPreview(item)"
         />
         <div
           v-if="!loadedMap[item] && !errorMap[item]"
@@ -110,6 +141,26 @@ onBeforeUnmount(() => {
     </div>
   </div>
   <div ref="infiniteSentinel" class="h-1"></div>
+  <div
+    v-if="previewSrc"
+    class="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+    @click="closePreview"
+    @wheel.prevent="onPreviewWheel"
+  >
+    <div class="max-w-[100vw] max-h-[100vh] overflow-auto">
+      <div class="min-w-full min-h-full flex items-center justify-center">
+        <img
+          :src="previewSrc"
+          class="block max-w-none cursor-zoom-out select-none"
+          :style="{
+            transform: `scale(${previewScale})`,
+            transformOrigin: 'center',
+          }"
+          @click="closePreview"
+        />
+      </div>
+    </div>
+  </div>
 </template>
 <style lang="less" scoped>
 .placeholder {
