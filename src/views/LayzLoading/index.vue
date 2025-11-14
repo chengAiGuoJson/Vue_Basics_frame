@@ -11,6 +11,17 @@ const infiniteSentinel = ref<HTMLElement | null>(null);
 const loading = ref(false);
 const PICTURE = 400;
 
+const loadedMap = ref<Record<string, boolean>>({});
+const errorMap = ref<Record<string, boolean>>({});
+const onImgLoad = (src: string) => {
+  loadedMap.value[src] = true;
+  errorMap.value[src] = false;
+};
+const onImgError = (src: string) => {
+  errorMap.value[src] = true;
+  loadedMap.value[src] = false;
+};
+
 const createHash = () =>
   Date.now().toString(36) + Math.random().toString(36).slice(2);
 const createImageUrl = () =>
@@ -74,9 +85,54 @@ onBeforeUnmount(() => {
       :key="index"
       class="bg-[#f0f0f0] p-4 flex items-center justify-center min-w-400px min-h-400px"
     >
-      <img :src="item" alt="" class="w-full h-full object-cover" />
+      <div class="relative w-full h-full">
+        <img
+          :src="item"
+          alt=""
+          class="w-full h-full object-cover transition-opacity duration-300"
+          :class="loadedMap[item] ? 'opacity-100' : 'opacity-0'"
+          @load="onImgLoad(item)"
+          @error="onImgError(item)"
+        />
+        <div
+          v-if="!loadedMap[item] && !errorMap[item]"
+          class="absolute inset-0 flex items-center justify-center placeholder"
+        >
+          <div class="loader"></div>
+        </div>
+        <div
+          v-if="errorMap[item]"
+          class="absolute inset-0 flex items-center justify-center error"
+        >
+          <span class="error-text">图片加载失败</span>
+        </div>
+      </div>
     </div>
   </div>
   <div ref="infiniteSentinel" class="h-1"></div>
 </template>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.placeholder {
+  background-color: #f5f5f5;
+}
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #d4d4d4;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+.error {
+  background-color: #ccc3c3;
+}
+.error-text {
+  color: #4c4949;
+  font-size: 14px;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>
