@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { debounce } from 'lodash'
+import { debounce } from "lodash";
 
 /**
  * promise 详解
@@ -58,7 +58,6 @@ import { debounce } from 'lodash'
 // function textFn(arg: FeatParams[0]) {
 // }
 // textFn({ userId: '张三', token: '123' })
-
 
 /**
  * 事件循环机制
@@ -144,18 +143,6 @@ import { debounce } from 'lodash'
 // console.log(Animal2.__proto__ === Function.prototype,'动物类的原型对象') // true
 // console.log(Animal2.prototype,'动物类的原型对象') // 类的原型就是它本身
 
-
-
-
-
-
-
-
-
-
-
-
-
 // const cat = new Animal('小白');
 // const obj = {
 //     name: '张三',
@@ -175,11 +162,244 @@ import { debounce } from 'lodash'
 // console.log(Animal.prototype,'动物类的原型对象')
 // console.log(Animal.__proto__,'动物类的原型对象')
 
-import TrafficLight from '@/components/TrafficLight/index.vue'
+import TrafficLight from "@/components/TrafficLight/index.vue";
+import { fa } from "element-plus/es/locales.mjs";
+/**
+ * 实现add函数
+ * const r1 = add[1][2][3] + 4
+ * const r2 = add[10][20] + 30
+ * const r3 = add[100][200][300] + 400
+ */
+// const add = (() => {
+//   let sum = 0;
+//   const target = {};
+//   const handler = {
+//     get(target, prop, receiver) {
+//       // a. 处理隐式转换的属性访问
+//       if (prop === "valueOf" || prop === Symbol.toPrimitive) {
+//         // 关键：返回一个函数，该函数返回当前的 sum
+//         // 同时，在这里重置 sum，以便下次计算从 0 开始
+//         console.log("执行这里1231231321");
+//         const result = () => {
+//           const finalSum = sum;
+//           sum = 0; // 重置 sum
+//           return finalSum;
+//         };
+//         return result;
+//       }
+
+//       // b. 处理数字属性的访问
+//       const numValue = parseInt(prop as string, 10);
+//       // 校验一下确保是数字属性
+//       if (!isNaN(numValue)) {
+//         console.log("zhixing");
+//         sum += numValue;
+//         // 返回代理自身，实现链式调用
+//         return receiver;
+//       }
+
+//       // c. 对于其他属性，执行默认行为
+//       return Reflect.get(target, prop, receiver);
+//     },
+//   };
+//   return new Proxy(target, handler);
+// })();
+// const r1 = add[10][20] + 4;
+// console.log(r1);
+// const r2 = add[10][20][30] + 4;
+// console.log(r2);
+
+/**
+ * try catch监听一个promise函数
+ * catch能捕获到函数通过throw抛出的的错误
+ */
+// const testErrFn = async (a?: number, b?: number) => {
+//   // 校验错误信息数组
+//   const errors = [];
+//   if (!a) {
+//     errors.push("a参数不能为空");
+//     throw new Error("a参数不能为空");
+//   }
+//   if (!b) {
+//     errors.push("b参数不能为空");
+//     throw new Error("b参数不能为空");
+//   }
+//   return true;
+// };
+// const zxFn = async () => {
+//   try {
+//     const res = await testErrFn(1);
+//     if (res) {
+//       console.log(res, "res是什么数据呢");
+//     }
+//   } catch (err) {
+//     console.log(err, "错误数据");
+//   }
+// };
+// zxFn();
+/**
+ * 测试一个object.defineProperty
+ * 测试一个proxy
+ * 的监听原理
+ */
+const obj = [1, 2, 3, 4];
+// Object.defineProperty(obj, "length", {
+//   get() {
+//     console.log("get length", obj);
+//     return obj.length;
+//   },
+//   set(val) {
+//     console.log("set length", val);
+//     this.length = val;
+//   },
+// });
+// obj.push(5);
+// const p = new Proxy(obj, {
+//   get(target, prop, receiver) {
+//     console.log("get", prop);
+//     return Reflect.get(target, prop, receiver);
+//   },
+//   set(target, prop, value, receiver) {
+//     console.log("set", prop, value);
+//     return Reflect.set(target, prop, value, receiver);
+//   },
+// });
+// p.push(5);
+// console.log(obj);
+/**
+ *
+ * @param fn 要防抖的函数
+ * @param sum 防抖的时间间隔
+ * @param isImmediate 是否立即执行
+ */
+function debounce(fn, sum, isImmediate) {
+  let timer = null;
+  return function (...agres) {
+    console.log("agres", agres);
+    let _this = this;
+    if (timer) clearTimeout(timer);
+    if (isImmediate) {
+      fn.apply(_this, agres);
+    } else {
+      timer = setTimeout(() => {
+        fn.apply(_this, agres);
+      }, sum);
+    }
+  };
+}
+const debouncedDeb = debounce(
+  (parmes) => {
+    console.log("我是防抖函数", parmes);
+  },
+  1000,
+  false
+);
+/**
+ * 节流函数
+ */
+// function throttle(fn, sum, istimer) {
+//   let timer = null;
+//   return function (...agr) {
+//     if (istimer) {
+//       fn.apply(_this, agr);
+//     } else {
+//       if (!timer) {
+//         timer = setTimeout(() => {
+//           fn.apply(this, agr);
+//           timer = null;
+//         }, sum);
+//       }
+//     }
+//   };
+// }
+// const throttledThrottle = throttle(
+//   (params) => {
+//     console.log("我是节流函数", params);
+//   },
+//   1000,
+//   false
+// );
+
+// function timerjl(fn, timer) {
+//   let timernow = 0;
+//   return function (...gra) {
+//     let now = Date.now();
+//     if (now - timernow > timer) {
+//       fn.apply(this, gra);
+//       timernow = now;
+//     }
+//   };
+// }
+// const throttledTimer = timerjl((params) => {
+//   console.log("我是定时器函数时间戳", params);
+// }, 1000);
+
+// const listArr = [
+//   { id: 1, name: "部门A", parentId: null },
+//   { id: 2, name: "部门B", parentId: 1 },
+//   { id: 3, name: "部门C", parentId: 1 },
+//   { id: 4, name: "部门D", parentId: 2 },
+//   { id: 5, name: "部门E", parentId: 2 },
+//   { id: 6, name: "部门F", parentId: 3 },
+// ];
+
+// function arrayToTree(list) {
+//   const map = new Map();
+//   const result = [];
+//   list.forEach((element) => {
+//     map.set(element.id, { ...element, Children: [] });
+//   });
+//   list.forEach((element) => {
+//     const node = map.get(element.id);
+//     if (!node.parentId) {
+//       result.push(node);
+//       return;
+//     }
+//     const parent = map.get(element.parentId);
+//     if (parent) {
+//       parent.Children.push(node);
+//     }
+//   });
+//   console.log(map, "map");
+//   return result;
+// }
+// console.log(arrayToTree(listArr), "arr数据");
+
+// const mapTest = new Map();
+// mapTest.set(1, { id: 1, name: "部门A", parentId: null, Children: [] });
+// mapTest.set(2, { id: 2, name: "部门B", parentId: 1, Children: [] });
+// // console.log(mapTest,"mapTest")
+// const node = mapTest.get(1);
+// // console.log(node,"node")
+// // const result = [];
+// // result.push(node);
+// // console.log(result,"result")
+// node.Children.push(mapTest.get(2));
+// // console.log(result, "result");
+// console.log(node, "node");
+// console.log(mapTest, "mapTest");
 </script>
 <template>
-    <div class="">
-        <TrafficLight></TrafficLight>
+  <div class="">
+    <!-- <TrafficLight></TrafficLight> -->
+    <div
+      class="text-24px color-[#000] cursor-pointer"
+      @click="debouncedDeb({ name: 'aiguo', age: 18 })"
+    >
+      防抖
     </div>
+    <div
+      class="text-24px color-[#000] cursor-pointer"
+      @click="throttledThrottle({ name: 'aiguo', age: 18 })"
+    >
+      节流
+    </div>
+    <div
+      class="text-24px color-[#000] cursor-pointer"
+      @click="throttledTimer({ name: 'aiguo', age: 18 })"
+    >
+      时间戳节流版本
+    </div>
+  </div>
 </template>
 <style scoped></style>

@@ -12,6 +12,7 @@
     "deploy": "npm run build-only && gh-pages -d dist"
   },
   "dependencies": {
+    "@vueuse/core": "^14.0.0",
     "dayjs": "^1.11.18",
     "echarts": "^5.5.0",
     "element-plus": "^2.11.2",

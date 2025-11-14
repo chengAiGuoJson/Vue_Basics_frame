@@ -1,108 +1,117 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import {type RouteRecordRaw} from 'vue-router'
+import { createRouter, createWebHashHistory } from "vue-router";
+import { type RouteRecordRaw } from "vue-router";
 export const routerList: RouteRecordRaw[] = [
   {
-    path: '/',
-    name: 'home',
+    path: "/",
+    name: "home",
     meta: {
-      name: '首页',
+      name: "首页",
     },
-    component: () => import('@/views/Home/index.vue')
+    component: () => import("@/views/Home/index.vue"),
   },
   {
-    path: '/element-test',
-    name: 'element-test',
+    path: "/element-test",
+    name: "element-test",
     meta: {
-      name: 'Element Plus 测试',
+      name: "Element Plus 测试",
     },
-    component: () => import('@/views/ElementDemo/index.vue')
+    component: () => import("@/views/ElementDemo/index.vue"),
   },
   {
-    path: '/vue3-proxy',
-    name: 'vue3-proxy',
+    path: "/vue3-proxy",
+    name: "vue3-proxy",
     meta: {
-      name: 'Vue3 Proxy响应式原理',
+      name: "Vue3 Proxy响应式原理",
     },
-    component: () => import('@/views/vue3_Proxy_and_vue2_DefineProperty/Vue3ProxyPrinciple.vue')
+    component: () =>
+      import(
+        "@/views/vue3_Proxy_and_vue2_DefineProperty/Vue3ProxyPrinciple.vue"
+      ),
   },
   {
-    path:'/watch-demo',
-    name:'watch-demo',
+    path: "/watch-demo",
+    name: "watch-demo",
     meta: {
-      name: 'watch与watchEffect',
+      name: "watch与watchEffect",
     },
-    component: () => import('@/views/WatchAndWatchEffect/index.vue')
+    component: () => import("@/views/WatchAndWatchEffect/index.vue"),
   },
   {
-    path:'/v-model-demo',
-    name:'v-model-demo',
+    path: "/v-model-demo",
+    name: "v-model-demo",
     meta: {
-      name: 'v-model 自定义指令',
+      name: "v-model 自定义指令",
     },
-    component: () => import('@/views/V-model/index.vue')
+    component: () => import("@/views/V-model/index.vue"),
   },
   {
-    path: '/svelte-demo',
-    name: 'svelte-demo',
+    path: "/svelte-demo",
+    name: "svelte-demo",
     meta: {
-      name: 'Svelte框架对比',
+      name: "Svelte框架对比",
     },
-    component: () => import('@/views/SvelteDemo/index.vue')
+    component: () => import("@/views/SvelteDemo/index.vue"),
   },
   {
-    path: '/js-ts',
-    name: 'JsTsDEMO',
+    path: "/js-ts",
+    name: "JsTsDEMO",
     meta: {
-      name: 'JsTsDEMO',
+      name: "JsTsDEMO",
     },
-    component: () => import('@/views/JsTsDemo/index.vue')
+    component: () => import("@/views/JsTsDemo/index.vue"),
   },
   {
-    path:'/animation-demo',
-    name:'animation-demo',
+    path: "/animation-demo",
+    name: "animation-demo",
     meta: {
-      name: '动画与过渡',
+      name: "动画与过渡",
     },
-    component: () => import('@/views/AnimationTransFrom/index.vue')
+    component: () => import("@/views/AnimationTransFrom/index.vue"),
   },
   {
-    path:'/form-component-test',
-    name:'form-component-test',
+    path: "/form-component-test",
+    name: "form-component-test",
     meta: {
-      name: '表单组件测试',
+      name: "表单组件测试",
     },
-    component: () => import('@/views/FormComponentTest/index.vue')
+    component: () => import("@/views/FormComponentTest/index.vue"),
   },
   {
-    path:'/performance-test',
-    name:'performance-test',
+    path: "/performance-test",
+    name: "performance-test",
     meta: {
-      name: '性能测试',
+      name: "性能测试",
     },
-    component: () => import('@/views/PerformanceTesting/index.vue')
+    component: () => import("@/views/PerformanceTesting/index.vue"),
   },
   {
-    path: '/scrollbar-demo',
-    name: 'scrollbar-demo',
+    path: "/scrollbar-demo",
+    name: "scrollbar-demo",
     meta: {
-      name: '滚动条样式演示',
+      name: "滚动条样式演示",
     },
-    component: () => import('@/views/ScrollbarDemo/index.vue')
+    component: () => import("@/views/ScrollbarDemo/index.vue"),
   },
   {
-    path: '/shopping-cart',
-    name: 'shopping-cart',
+    path: "/shopping-cart",
+    name: "shopping-cart",
     meta: {
-      name: '购物车',
+      name: "购物车",
     },
-    component: () => import('@/views/ShoppingCart/index.vue')
+    component: () => import("@/views/ShoppingCart/index.vue"),
   },
-]
+  {
+    path: "/layz-loading",
+    name: "layz-loading",
+    meta: {
+      name: "图片瀑布流",
+    },
+    component: () => import("@/views/LayzLoading/index.vue"),
+  },
+];
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
-  routes: [
-    ...routerList
-  ]
-})
+  routes: [...routerList],
+});
 
-export default router
+export default router;
