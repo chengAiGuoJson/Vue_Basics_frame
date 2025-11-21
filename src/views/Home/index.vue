@@ -223,6 +223,12 @@ const features = ref([
     path: "/layz-loading",
     icon: "🖼️",
   },
+  {
+    name: "场景案例demo",
+    description: "展示实际项目中的场景案例和解决方案",
+    path: "/scene-case-demo",
+    icon: "📝",
+  },
 ]);
 
 // 技术亮点数据

@@ -108,6 +108,14 @@ export const routerList: RouteRecordRaw[] = [
     },
     component: () => import("@/views/LayzLoading/index.vue"),
   },
+  {
+    path: "/scene-case-demo",
+    name: "scene-case-demo",
+    meta: {
+      name: "场景案例demo",
+    },
+    component: () => import("@/views/SceneCaseDemo/index.vue"),
+  },
 ];
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
