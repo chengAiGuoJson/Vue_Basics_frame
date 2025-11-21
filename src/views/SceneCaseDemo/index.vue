@@ -55,7 +55,7 @@ function switchCase(item: any) {
 <style scoped>
 .scene-case-demo {
   display: flex;
-  height: calc(100vh - 100px); /* 减去头部导航等高度 */
+  height: calc(100vh - 0px); /* 减去头部导航等高度 */
   padding: 20px;
   gap: 20px;
 }
