@@ -150,6 +150,18 @@ const keywords = [
 // 功能模块数据
 const features = ref([
   {
+    name: "图片瀑布流，触底懒加载，无限图片",
+    description: "实现图片瀑布流布局，支持无限滚动加载，优化用户体验和页面性能",
+    path: "/layz-loading",
+    icon: "🖼️",
+  },
+  {
+    name: "场景案例demo",
+    description: "展示实际项目中的场景案例和解决方案",
+    path: "/scene-case-demo",
+    icon: "📝",
+  },
+  {
     name: "Vue3 Proxy响应式",
     description: "深入理解 Vue 3 响应式原理，对比 Vue 2 的 defineProperty 实现",
     path: "/vue3-proxy",
@@ -216,18 +228,6 @@ const features = ref([
       "面向对象开发实现购物车功能，包括添加、删除、数量调整和总价计算",
     path: "/shopping-cart",
     icon: "🛒",
-  },
-  {
-    name: "图片瀑布流，触底懒加载，无限图片",
-    description: "实现图片瀑布流布局，支持无限滚动加载，优化用户体验和页面性能",
-    path: "/layz-loading",
-    icon: "🖼️",
-  },
-  {
-    name: "场景案例demo",
-    description: "展示实际项目中的场景案例和解决方案",
-    path: "/scene-case-demo",
-    icon: "📝",
   },
 ]);
 
