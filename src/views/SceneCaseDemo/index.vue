@@ -1,28 +1,8 @@
 <script lang="ts" setup>
 import { ref, shallowRef } from "vue";
-import ConcurrentRequestDemo from "./components/ConcurrentRequestDemo.vue";
-import BigFileUploadDemo from "./components/BigFileUploadDemo.vue";
-import PageScreenshotDemo from "./components/PageScreenshotDemo.vue";
-const sceneCasesList = ref([
-  {
-    title: "并发请求处理",
-    description: "展示实际项目中如何处理并发请求，避免阻塞用户操作",
-    component: ConcurrentRequestDemo,
-  },
-  {
-    title: "大文件上传",
-    description: "展示实际项目中如何处理大文件上传，避免超时和内存溢出",
-    component: BigFileUploadDemo,
-  },
-  {
-    title: "前端怎样实现页面截图",
-    description: "展示实际项目中如何使用前端技术实现页面截图功能",
-    component: PageScreenshotDemo,
-  },
-]);
-
+import { useSceneCaseDemo } from "./config";
+const { sceneCasesList } = useSceneCaseDemo();
 const currentCase = shallowRef(sceneCasesList.value[0]);
-
 function switchCase(item: any) {
   currentCase.value = item;
 }
