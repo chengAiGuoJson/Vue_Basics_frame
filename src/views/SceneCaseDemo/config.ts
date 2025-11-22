@@ -1,7 +1,9 @@
-import { ref } from "vue";
-import ConcurrentRequestDemo from "./components/ConcurrentRequestDemo/ConcurrentRequestDemo.vue";
-import BigFileUploadDemo from "./components/BigFileUploadDemo/BigFileUploadDemo.vue";
-import PageScreenshotDemo from "./components/PageScreenshotDemo/PageScreenshotDemo.vue";
+import { ref, defineAsyncComponent } from "vue";
+
+// 懒加载组件
+const ConcurrentRequestDemo = defineAsyncComponent(() => import("./components/ConcurrentRequestDemo/ConcurrentRequestDemo.vue"));
+const BigFileUploadDemo = defineAsyncComponent(() => import("./components/BigFileUploadDemo/BigFileUploadDemo.vue"));
+const PageScreenshotDemo = defineAsyncComponent(() => import("./components/PageScreenshotDemo/PageScreenshotDemo.vue"));
 export const useSceneCaseDemo = () => {
     const sceneCasesList =ref([
         { 
