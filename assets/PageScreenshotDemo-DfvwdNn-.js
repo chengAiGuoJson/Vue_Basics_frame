@@ -1,0 +1,1 @@
+import{d as t,c as a,a as n,b as o,_ as s}from"./index-CHdUUTk2.js";const r=t({__name:"PageScreenshotDemo",setup(c){return(_,e)=>(n(),a("div",null,[...e[0]||(e[0]=[o("h3",null,"前端怎样实现页面截图",-1),o("p",null,"这里是前端怎样实现页面截图的示例内容。",-1)])]))}}),p=s(r,[["__scopeId","data-v-0f3883cf"]]);export{p as default};
