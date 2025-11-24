@@ -229,6 +229,12 @@ const features = ref([
     path: "/shopping-cart",
     icon: "🛒",
   },
+  {
+    name: "项目介绍",
+    description: "展示项目的背景、目标和实现方案",
+    path: "/self-project-introduction",
+    icon: "📝",
+  },
 ]);
 
 // 技术亮点数据
