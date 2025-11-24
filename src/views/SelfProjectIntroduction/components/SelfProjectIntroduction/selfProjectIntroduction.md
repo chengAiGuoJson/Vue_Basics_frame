@@ -28,6 +28,7 @@ import { to } from '@web/common/util'
  * @param {string} options.type - 此方法对应的图表类型
  * @param {number} options.seriesIndex - ECharts中需要追加数据的系列索引
  * @param {Function} options.dataMapper - 用于处理和映射单页数据的函数
+ * @param {number} options.pageSize - 每页请求的数据量，默认值为1000
  * @param {Function} options.onCancelled - 一个返回布尔值的函数，用于检查操作是否应被取消
  */
 export const loadDataIncrementally = async ({
@@ -39,10 +40,10 @@ export const loadDataIncrementally = async ({
   type,
   seriesIndex = 0,
   dataMapper,
+  pageSize = 1000,
   onCancelled = () => false,
 }) => {
   dataRef.value = []; // 开始前清空数据
-  const pageSize = 1000;
   let page = 1;
   let hasMoreData = true;
 
