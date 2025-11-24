@@ -1,1 +1,0 @@
-import{d as o,c as t,a as n,b as a,_ as s}from"./index-CBNB1lXo.js";const r=o({__name:"PageScreenshotDemo",setup(c){return(_,e)=>(n(),t("div",null,[...e[0]||(e[0]=[a("h3",null,"前端怎样实现页面截图",-1),a("p",null,"这里是前端怎样实现页面截图的示例内容。",-1)])]))}}),p=s(r,[["__scopeId","data-v-b45afac0"]]);export{p as default};
