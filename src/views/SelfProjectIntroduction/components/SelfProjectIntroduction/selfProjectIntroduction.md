@@ -46,7 +46,6 @@ export const loadDataIncrementally = async ({
   dataRef.value = []; // 开始前清空数据
   let page = 1;
   let hasMoreData = true;
-
   while (hasMoreData) {
     if (onCancelled()) break;
 
