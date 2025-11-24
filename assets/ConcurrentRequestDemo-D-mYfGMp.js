@@ -1,0 +1,1 @@
+import{d as n,c as o,a as s,b as t,_ as r}from"./index-nxSPgvv3.js";const a=n({__name:"ConcurrentRequestDemo",setup(c){return(u,e)=>(s(),o("div",null,[...e[0]||(e[0]=[t("h3",null,"并发请求处理",-1),t("p",null,"这里是并发请求处理的示例内容。",-1)])]))}}),l=r(a,[["__scopeId","data-v-f58811b6"]]);export{l as default};
