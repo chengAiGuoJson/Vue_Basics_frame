@@ -235,6 +235,12 @@ const features = ref([
     path: "/self-project-introduction",
     icon: "📝",
   },
+  {
+    name: "DataV组件",
+    description: "展示 DataV 组件库的使用和自定义主题配置",
+    path: "/datav-demo",
+    icon: "📊",
+  },
 ]);
 
 // 技术亮点数据

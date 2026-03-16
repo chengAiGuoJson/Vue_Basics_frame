@@ -1,5 +1,31 @@
 <script lang="ts" setup>
-import { debounce } from "lodash";
+// import { Decimal } from "decimal.js";
+// import Big from "big.js";
+// import { debounce } from "lodash";
+
+// big.js
+// const bigPrecision = {
+//   add: Big(0.1).plus(0.2).toString(),
+//   sub: Big(0.3).minus(0.1).toString(),
+//   mul: Big(0.1).times(0.2).toString(),
+//   div: Big(0.3).div(0.1).toString(),
+// };
+// console.log(bigPrecision, "bigPrecision 是多少呢");
+// // decimal.js
+// const nativePrecision = {
+//   add: 0.1 + 0.2,
+//   sub: 0.3 - 0.1,
+//   mul: 0.1 * 0.2,
+//   div: 0.3 / 0.1,
+// };
+
+// const decimalPrecision = {
+//   add: new Decimal(0.1).plus(0.2).toString(),
+//   sub: new Decimal(0.3).minus(0.1).toString(),
+//   mul: new Decimal(0.1).times(0.2).toString(),
+//   div: new Decimal(0.3).dividedBy(0.1).toString(),
+// };
+// console.log(decimalPrecision, "decimalPrecision 是多少呢");
 
 /**
  * promise 详解
@@ -163,7 +189,9 @@ import { debounce } from "lodash";
 // console.log(Animal.__proto__,'动物类的原型对象')
 
 import TrafficLight from "@/components/TrafficLight/index.vue";
-import { fa } from "element-plus/es/locales.mjs";
+import { number } from "echarts";
+import { fa, ta } from "element-plus/es/locales.mjs";
+import { isNumber } from "element-plus/es/utils/types.mjs";
 /**
  * 实现add函数
  * const r1 = add[1][2][3] + 4
@@ -242,7 +270,7 @@ import { fa } from "element-plus/es/locales.mjs";
  * 测试一个proxy
  * 的监听原理
  */
-const obj = [1, 2, 3, 4];
+// const obj = [1, 2, 3, 4];
 // Object.defineProperty(obj, "length", {
 //   get() {
 //     console.log("get length", obj);
@@ -272,28 +300,28 @@ const obj = [1, 2, 3, 4];
  * @param sum 防抖的时间间隔
  * @param isImmediate 是否立即执行
  */
-function debounce(fn, sum, isImmediate) {
-  let timer = null;
-  return function (...agres) {
-    console.log("agres", agres);
-    let _this = this;
-    if (timer) clearTimeout(timer);
-    if (isImmediate) {
-      fn.apply(_this, agres);
-    } else {
-      timer = setTimeout(() => {
-        fn.apply(_this, agres);
-      }, sum);
-    }
-  };
-}
-const debouncedDeb = debounce(
-  (parmes) => {
-    console.log("我是防抖函数", parmes);
-  },
-  1000,
-  false
-);
+// function debounce(fn, sum, isImmediate) {
+//   let timer = null;
+//   return function (...agres) {
+//     console.log("agres", agres);
+//     let _this = this;
+//     if (timer) clearTimeout(timer);
+//     if (isImmediate) {
+//       fn.apply(_this, agres);
+//     } else {
+//       timer = setTimeout(() => {
+//         fn.apply(_this, agres);
+//       }, sum);
+//     }
+//   };
+// }
+// const debouncedDeb = debounce(
+//   (parmes) => {
+//     console.log("我是防抖函数", parmes);
+//   },
+//   1000,
+//   false
+// );
 /**
  * 节流函数
  */
@@ -378,6 +406,268 @@ const debouncedDeb = debounce(
 // // console.log(result, "result");
 // console.log(node, "node");
 // console.log(mapTest, "mapTest");
+
+// 手写promise.all方法
+// 全部成功则成功，一个失败则失败
+// Promise.all = function(promises){
+//   let count = 0
+//   let rusult = []
+//   return new Promise((resolve,reject) =>{
+//     for(let p of promises){
+//       let i = count
+//       count ++
+//       Promise(p).then(resolve,reject)
+//     }
+//   })
+
+// }
+// Promise.all = function (promises: any) {
+//   return new Promise((resolve, reject) => {
+//     try {
+//       let count = 0;
+//       let result: any[] = [];
+//       let resCount = 0;
+//       for (let p of promises) {
+//         let i = count;
+//         count++;
+//         Promise.resolve(p).then(
+//           (res) => {
+//             resCount++;
+//             result[i] = res + "我成功了";
+//             if (resCount === count) {
+//               resolve(result);
+//             }
+//           },
+//           (err) => {
+//             reject(err);
+//           }
+//         );
+//       }
+//       if (count === 0) return resolve(result);
+//     } catch (err) {
+//       reject(err);
+//     }
+//   });
+// };
+// const pro1 = new Promise((resolve, reject) => {
+//   setTimeout(() => {
+//     resolve("pro1成功");
+//   }, 1000);
+// });
+// Promise.all([
+//   pro1,
+//   Promise.resolve(1),
+//   Promise.resolve(2),
+//   Promise.resolve(3),
+// ]).then(
+//   (res) => {
+//     console.log(res, "执行成功");
+//   },
+//   (err) => {
+//     console.log(err, "err数据");
+//   }
+// );
+// 写一个去重代码js
+/**
+ * 使用 reduce 对数组进行去重
+ * @param arr 需要去重的数组
+ * @returns 去重后的新数组
+ */
+// function uniqueWithReduce<T>(arr: T[]): T[] {
+//   return arr.reduce((accumulator: T[], current: T) => {
+//     if (!accumulator.includes(current)) {
+//       accumulator.push(current);
+//     }
+//     return accumulator;
+//   }, []);
+// }
+
+// // 示例
+// const arrayWithDuplicates = [1, 2, 'a', 3, 'a', 2, 4, 5, 4];
+// const uniqueArray = uniqueWithReduce(arrayWithDuplicates);
+// console.log(uniqueArray); // 输出: [1, 2, "a", 3, 4, 5]
+const aa = [
+  { name: "aiguo", age: 25 },
+  { name: "aiguo", age: 25 },
+];
+function uniqueWithReduce<T>(arr: T[]): T[] {
+  return arr.reduce((accumulator: T[], current: T) => {
+    if (!accumulator.includes(current)) {
+      accumulator.push(current);
+    }
+    return accumulator;
+  }, []);
+}
+console.log(uniqueWithReduce(aa), "去重后的数据");
+
+// 千分位
+// function qfw(sum: number) {
+//   if (sum === null || sum === undefined) return "";
+//   let str = sum.toString();
+//   if (isNaN(Number(str))) return str;
+//   let [a, b] = str.split(",");
+//   const formattedInteger = a.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+//   return b ? `${a.b}` : a;
+// }
+
+// console.log(qcc(aa));
+// function qc(list) {
+//   return [...new Set(list)];
+// }
+// console.log(qc(aa), "aa数据内容");
+// console.log(uniqueWithReduce(aa), "aa数据");
+// const allsum = aa.reduce((pre, cur) => {
+//   console.log(pre, cur, "数据内容");
+//   return pre + cur;
+// }, []);
+// console.log(allsum, "allsum数据");
+// let obj = {
+//   name: "aiguo",
+//   age: 25,
+// };
+// const objdl = new Proxy(obj, {
+//   get(target, prop) {
+//     console.log("执行了读取操作");
+//     return Reflect.get(target, prop);
+//   },
+//   set(target, prop, value) {
+//     console.log("执行了写入操作");
+//     return Reflect.set(target, prop, value);
+//   },
+// });
+// console.log(objdl.age);
+// function mapQc(arr: any[]) {
+//   const mapList = new Map();
+//   const result = arr.filter((item) => {
+//     if (!mapList.has(item)) {
+//       mapList.set(item, true);
+//       return true;
+//     } else {
+//       return false;
+//     }
+//   });
+//   return result;
+// }
+// const aaObj = [1, 2, 3, 4, 5, 5, 6, 6, 77, 77, 78];
+// console.log(mapQc(aaObj), "aaObj数据");
+// const map1 = new Map();
+// map1.set("bar", true);
+// console.log(map1);
+// const mapList = new Map();
+// const setList = new Set();
+// const weakMapList = new WeakMap();
+// const weakSetList = new WeakSet();
+// mapList.set("name", "aiguo");
+// setList.add("aiguo");
+// console.log(mapList, setList);
+
+// 深拷贝
+
+const list = [
+  { id: 1, name: "部门A", parentId: null },
+  { id: 2, name: "部门B", parentId: 1 },
+  { id: 3, name: "部门C", parentId: 1 },
+  { id: 4, name: "部门D", parentId: 2 },
+  { id: 5, name: "部门E", parentId: 2 },
+  { id: 6, name: "部门F", parentId: 3 },
+];
+interface ListType {
+  id: number;
+  name: string;
+  parentId: number | null;
+}
+interface TreeNode extends ListType {
+  children: ListType[];
+}
+function arrayToTree(items: ListType[]): TreeNode[] {
+  let mapTreeNode = new Map<number, TreeNode>();
+  items.forEach((element) => {
+    mapTreeNode.set(element.id, { ...element, children: [] });
+  });
+  const result: TreeNode[] = [];
+  // for (const item of items) {
+  //   const node = mapTreeNode.get(item.id);
+  //   if (node?.parentId === null) {
+  //     result.push(node);
+  //     continue;
+  //   }
+  //   const parent = mapTreeNode.get(item.parentId as number);
+  //   if (parent) {
+  //     parent.children.push(node);
+  //   }
+  // }
+  items.forEach((element) => {
+    const node = mapTreeNode.get(element.id);
+    if (node?.parentId === null) {
+      result.push(node);
+      return;
+    }
+    const parent = mapTreeNode.get(element.parentId as number);
+    if (parent) {
+      parent?.children.push(node);
+    }
+  });
+  return result;
+}
+// function arrayToTree(items: FlatItem[]): TreeNode[] {
+//   const nodeMap = new Map<number, TreeNode>();
+//   // 先把所有节点建立映射，保证 children 都存在
+//   for (const item of items) {
+//     nodeMap.set(item.id, { ...item, children: [] });
+//   }
+//   const roots: TreeNode[] = [];
+//   // 再进行父子关联
+//   for (const item of items) {
+//     const node = nodeMap.get(item.id)!;
+//     if (item.parentId === null) {
+//       roots.push(node);
+//       continue;
+//     }
+//     const parent = nodeMap.get(item.parentId);
+//     if (parent) {
+//       //因为nodeMap 中已经有了所有节点，所以可以直接push,而且他是引用类型可以直接改变原对象的值
+//       parent.children.push(node);
+//     }
+//   }
+//   return roots;
+// }
+// console.log(arrayToTree(list));
+// function deepClone(target: any, map = new WeakMap()) {
+//   if (target === null || typeof target !== "object") return target;
+//   if (target instanceof Date) return new Date(target);
+//   if (target instanceof RegExp) return new RegExp(target);
+//   if (map.has(target)) return map.get(target);
+//   const cloneTarget = Array.isArray(target) ? [] : {};
+//   map.set(target, cloneTarget);
+//   for (let key in target) {
+//     if (target.hasOwnProperty(key)) {
+//       cloneTarget[key] = deepClone(target[key], map);
+//     }
+//   }
+//   return cloneTarget;
+// }
+// const objaa = {
+//   name: "aiguo",
+//   aa: () => {},
+//   cc: [1, 2, 3.4],
+// };
+// const objbb = deepClone(objaa);
+// console.log(objaa, objbb, objaa === objbb);
+
+// 金额千分位格式化
+function qfw(sum: number | string): string {
+  if (sum === null || sum === undefined) return "";
+  let sumStr = sum.toString();
+  if (isNaN(Number(sumStr))) return "";
+  const [intSum, flatSum] = sumStr.split(".");
+  const intSumDh = intSum.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return flatSum ? `${intSumDh}.${flatSum}` : intSumDh;
+}
+console.log(qfw(123456.23));
+console.log((1234567.23).toLocaleString());
+
+
 </script>
 <template>
   <div class="">
@@ -400,6 +690,20 @@ const debouncedDeb = debounce(
     >
       时间戳节流版本
     </div>
+    <!-- <div class="text-24px color-[#000]">
+      <h2>原生JS计算</h2>
+      <p>0.1 + 0.2 = {{ nativePrecision.add }}</p>
+      <p>0.3 - 0.1 = {{ nativePrecision.sub }}</p>
+      <p>0.1 * 0.2 = {{ nativePrecision.mul }}</p>
+      <p>0.3 / 0.1 = {{ nativePrecision.div }}</p>
+    </div>
+    <div class="text-24px color-[#000]">
+      <h2>decimal.js计算</h2>
+      <p>0.1 + 0.2 = {{ decimalPrecision.add }}</p>
+      <p>0.3 - 0.1 = {{ decimalPrecision.sub }}</p>
+      <p>0.1 * 0.2 = {{ decimalPrecision.mul }}</p>
+      <p>0.3 / 0.1 = {{ decimalPrecision.div }}</p>
+    </div> -->
   </div>
 </template>
 <style scoped></style>

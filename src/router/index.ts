@@ -124,6 +124,14 @@ export const routerList: RouteRecordRaw[] = [
     },
     component: () => import("@/views/SelfProjectIntroduction/index.vue"),
   },
+  {
+    path: "/datav-demo",
+    name: "datav-demo",
+    meta: {
+      name: "DataV组件",
+    },
+    component: () => import("@/views/DataV/index.vue"),
+  },
 ];
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
