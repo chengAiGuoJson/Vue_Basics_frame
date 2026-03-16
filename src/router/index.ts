@@ -24,9 +24,7 @@ export const routerList: RouteRecordRaw[] = [
       name: "Vue3 Proxy响应式原理",
     },
     component: () =>
-      import(
-        "@/views/vue3_Proxy_and_vue2_DefineProperty/Vue3ProxyPrinciple.vue"
-      ),
+      import("@/views/vue3_Proxy_and_vue2_DefineProperty/Vue3ProxyPrinciple.vue"),
   },
   {
     path: "/watch-demo",
@@ -131,6 +129,22 @@ export const routerList: RouteRecordRaw[] = [
       name: "DataV组件",
     },
     component: () => import("@/views/DataV/index.vue"),
+  },
+  {
+    path: "/cesium-demo",
+    name: "cesium-demo",
+    meta: {
+      name: "Cesium 3D 地图",
+    },
+    component: () => import("@/views/CesIum/index.vue"),
+  },
+  {
+    path: "/three-demo",
+    name: "three-demo",
+    meta: {
+      name: "three.js 3D 地图",
+    },
+    component: () => import("@/views/Three/index.vue"),
   },
 ];
 const router = createRouter({

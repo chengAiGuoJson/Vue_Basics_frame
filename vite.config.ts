@@ -1,18 +1,20 @@
-import { fileURLToPath, URL } from 'node:url'
+import { fileURLToPath, URL } from "node:url";
 
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import WindiCSS from 'vite-plugin-windicss'
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import AutoImport from "unplugin-auto-import/vite";
+import Components from "unplugin-vue-components/vite";
+import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
+import WindiCSS from "vite-plugin-windicss";
+import cesium from "vite-plugin-cesium";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/Vue_Basics_frame/',
+  base: "/Vue_Basics_frame/",
   plugins: [
     vue(),
     WindiCSS(),
+    cesium(),
     AutoImport({
       resolvers: [ElementPlusResolver()],
     }),
@@ -23,17 +25,17 @@ export default defineConfig({
   server: {
     open: true,
     proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
+      "/api": {
+        target: "http://localhost:3000",
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  }
-})
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
+  },
+});

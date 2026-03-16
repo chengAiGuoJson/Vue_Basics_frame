@@ -150,6 +150,18 @@ const keywords = [
 // 功能模块数据
 const features = ref([
   {
+    name: "Cesium 3D 地图",
+    description: "展示 3D 地图和空间数据可视化",
+    path: "/cesium-demo",
+    icon: "🌐",
+  },
+  {
+    name: "three.js 3D 地图",
+    description: "展示 3D 地图和空间数据可视化",
+    path: "/three-demo",
+    icon: "3D",
+  },
+  {
     name: "图片瀑布流，触底懒加载，无限图片",
     description: "实现图片瀑布流布局，支持无限滚动加载，优化用户体验和页面性能",
     path: "/layz-loading",
