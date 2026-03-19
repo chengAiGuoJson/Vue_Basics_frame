@@ -56,7 +56,7 @@ export const routerList: RouteRecordRaw[] = [
     meta: {
       name: "JsTsDEMO",
     },
-    component: () => import("@/views/JsTsDemo/index.vue"),
+    component: () => import("@/views/JsTSDemo/index.vue"),
   },
   {
     path: "/animation-demo",
