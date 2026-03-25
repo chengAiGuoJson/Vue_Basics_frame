@@ -50,6 +50,7 @@ const animate = () => {
 };
 
 onMounted(() => {
+  console.log(import.meta.env.BASE_URL, "model/LittlestTokyo.glb");
   // 初始化 Three.js 渲染器
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(width, height);
@@ -73,9 +74,11 @@ onMounted(() => {
     loader.setDRACOLoader(dracoLoader);
 
     // 3. 开始异步加载模型
+    // "https://threejs.org/examples/models/gltf/LittlestTokyo.glb",
     loader.load(
       // 3.1. 提供模型文件的 URL 地址
-      "https://threejs.org/examples/models/gltf/LittlestTokyo.glb",
+      // 使用 import.meta.env.BASE_URL 来动态获取 Vite 配置的基础路径 获取到的是这个 /Vue_Basics_frame/
+      `${import.meta.env.BASE_URL}model/LittlestTokyo.glb`,
 
       // 3.2. 定义加载成功后的回调函数，参数 gltf 包含了解析后的模型所有信息
       (gltf) => {
