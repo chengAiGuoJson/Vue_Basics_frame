@@ -19,15 +19,22 @@ onMounted(() => {
     shouldAnimate: true, // Enable animation
     baseLayerPicker: false, // 禁用底图选择器，防止其覆盖默认设置
   });
-  // 加入天地图矢量图
-  const customImageryProvider = new Cesium.WebMapTileServiceImageryProvider({
-    url: "https://t0.tianditu.gov.cn/vec_w/wmts?service=wmts&request=GetTile&version=1.0.0&layer=vec&style=default&tileMatrixSet=w&tileMatrix={z}&tileRow={y}&tileCol={x}&format=tiles", // 指向 public/bigemap-tiles/ 目录
-    layer: "tdtBasicLayer",
-    style: "default",
-    format: "image/png",
-    tileMatrixSetID: "GoogleMapsCompatible",
-  });
-  viewer.imageryLayers.addImageryProvider(customImageryProvider);
+  viewer.scene.primitives.add(
+    // 加入模型矩阵调试线框
+    new Cesium.DebugModelMatrixPrimitive({
+      length: 16668666.8,
+      width: 2,
+    }),
+  );
+  // // 加入天地图矢量图
+  // const customImageryProvider = new Cesium.WebMapTileServiceImageryProvider({
+  //   url: "https://t0.tianditu.gov.cn/vec_w/wmts?service=wmts&request=GetTile&version=1.0.0&layer=vec&style=default&tileMatrixSet=w&tileMatrix={z}&tileRow={y}&tileCol={x}&format=tiles", // 指向 public/bigemap-tiles/ 目录
+  //   layer: "tdtBasicLayer",
+  //   style: "default",
+  //   format: "image/png",
+  //   tileMatrixSetID: "GoogleMapsCompatible",
+  // });
+  // viewer.imageryLayers.addImageryProvider(customImageryProvider);
 });
 </script>
 
