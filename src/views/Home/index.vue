@@ -156,8 +156,8 @@ const features = ref([
     icon: "🌐",
   },
   {
-    name: "three.js 3D 地图",
-    description: "展示 3D 地图和空间数据可视化",
+    name: "three.js 3D",
+    description: "展示3D空间数据可视化",
     path: "/three-demo",
     icon: "3D",
   },
