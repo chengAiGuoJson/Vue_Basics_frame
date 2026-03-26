@@ -1,1 +1,0 @@
-import{_ as s,c as a,a as c,b as t}from"./index-Tsy2-O-y.js";const o={},r={class:"js-ts-demo"};function n(i,e){return c(),a("div",r,[...e[0]||(e[0]=[t("div",{class:"page-content"},[t("h1",{class:"theme-title large"},"JavaScript 与 TypeScript 测试页面")],-1)])])}const l=s(o,[["render",n]]);export{l as default};

@@ -1,1 +1,0 @@
-import{d as a,r as n,c as t,a as r,b as o}from"./index-Tsy2-O-y.js";const c=a({__name:"index",setup(s){return n(0),(l,e)=>(r(),t("div",null,[...e[0]||(e[0]=[o("h1",null,"DataV组件",-1)])]))}});export{c as default};
