@@ -1,0 +1,1 @@
+import{_ as s,c as t,a as r,b as n}from"./index-Tsy2-O-y.js";const o={},c={class:"three"};function a(_,e){return r(),t("div",c,[...e[0]||(e[0]=[n("h1",null,"Three",-1)])])}const l=s(o,[["render",a]]);export{l as default};
